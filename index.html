@@ -103,6 +103,7 @@
         .page { display: none; }
         .page.active { display: block; }
 
+        /* Moveset Cards */
         .code-card {
             background: #0a0a0a;
             border: 2px solid #333;
@@ -120,6 +121,7 @@
             cursor: pointer;
         }
 
+        /* Detail View */
         .code-detail-page {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -150,7 +152,7 @@
 <body>
 
     <audio id="bgMusic" loop>
-        <source src="Let It Ride - Anno Domini Beats.mp3" type="audio/mpeg">
+        <source src="Let%20It%20Ride%20-%20Anno%20Domini%20Beats.mp3" type="audio/mpeg">
     </audio>
 
     <div class="sidebar">
@@ -183,8 +185,8 @@
         <div id="codes" class="page">
             <h1>Moveset Codes</h1>
             <div class="code-card">
-                <span style="font-size: 1.8rem;">Example Moveset</span>
-                <button class="view-btn" onclick="openCode('Example Moveset', 'CODE-AURA-2026')">VIEW CODE</button>
+                <span style="font-size: 1.8rem;">Gojo V2 Moveset</span>
+                <button class="view-btn" onclick="openCode('Gojo V2', 'CODE-G-9910')">VIEW CODE</button>
             </div>
         </div>
 
@@ -208,16 +210,21 @@
         const music = document.getElementById('bgMusic');
         const mBtn = document.getElementById('musicToggle');
         
-        // Setting initial volume to 40% so it's not too loud
         music.volume = 0.4;
 
         function toggleMusic() {
             if (music.paused) {
-                music.play().catch(e => console.log("Music play failed:", e));
-                mBtn.innerText = "MUSIC: ON";
-                mBtn.style.borderColor = "#5ab9ff";
-                mBtn.style.color = "#5ab9ff";
+                // Play and update button
+                music.play().then(() => {
+                    mBtn.innerText = "MUSIC: ON";
+                    mBtn.style.borderColor = "#5ab9ff";
+                    mBtn.style.color = "#5ab9ff";
+                }).catch(e => {
+                    alert("Click again to play music.");
+                    console.log("Play failed:", e);
+                });
             } else {
+                // Pause and update button
                 music.pause();
                 mBtn.innerText = "MUSIC: OFF";
                 mBtn.style.borderColor = "#FF0000";
