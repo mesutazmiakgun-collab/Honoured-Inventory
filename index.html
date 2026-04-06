@@ -9,18 +9,17 @@
         body { 
             font-family: 'Finger Paint', cursive; 
             background: #000; 
-            color: white; 
+            color: #fff; 
             margin: 0; 
             display: flex; 
             height: 100vh; 
-            -webkit-font-smoothing: antialiased;
         }
 
-        /* Sidebar Navigation */
+        /* Sidebar - From your Screenshot */
         .sidebar { 
-            width: 180px; 
+            width: 190px; 
             background: #050505; 
-            padding: 25px; 
+            padding: 30px 20px; 
             display: flex; 
             flex-direction: column; 
             border-right: 1px solid #111;
@@ -28,15 +27,15 @@
 
         .sidebar-title { 
             font-size: 1.3rem; 
-            margin-bottom: 35px; 
+            margin-bottom: 40px; 
             line-height: 1.2;
-            color: #fff;
+            color: #FF0000; 
         }
 
         .nav-btn { 
             background: transparent; 
             border: 1px solid #333; 
-            color: white; 
+            color: #fff; 
             padding: 12px; 
             text-align: left; 
             cursor: pointer; 
@@ -46,17 +45,13 @@
             transition: 0.2s;
         }
 
-        /* The Blue Selection Glow from JJS/Your Screenshot */
+        /* JJS Blue Glow Selection */
         .nav-btn.active { 
             border: 2px solid #5ab9ff; 
             box-shadow: inset 0 0 10px rgba(90, 185, 255, 0.4);
         }
 
-        .nav-btn:hover:not(.active) {
-            border-color: #FF0000;
-        }
-
-        /* Content Area */
+        /* Main Content */
         .main-content { 
             flex-grow: 1; 
             padding: 50px; 
@@ -64,42 +59,59 @@
             overflow-y: auto; 
         }
 
-        .page { display: none; }
-        .page.active { display: block; }
+        h1 { font-size: 3.5rem; margin-top: 0; color: #fff; letter-spacing: -2px; }
+        p { font-size: 1.2rem; line-height: 1.6; max-width: 800px; color: #ccc; }
 
-        h1 { font-size: 2.8rem; margin: 0 0 20px 0; color: #fff; }
-        p { font-size: 1.1rem; line-height: 1.6; max-width: 850px; color: #eee; }
-
-        /* Video Section */
+        /* Video Box - Original Red Border */
         .video-box { 
-            max-width: 700px; 
+            max-width: 800px; 
             aspect-ratio: 16/9; 
-            background: #000; 
-            margin-top: 30px; 
-            border: 2px solid #222;
+            border: 3px solid #FF0000;
+            margin-top: 30px;
+            background: #000;
         }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Code Vault Style */
-        .code-container {
+        /* Guns.lol Link Button */
+        .guns-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background: #111;
+            border: 2px solid #FF0000;
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: 0.3s;
+        }
+        .guns-link:hover {
+            background: #FF0000;
+            box-shadow: 0 0 15px #FF0000;
+        }
+
+        /* Code Vault Section */
+        .code-row {
             background: #0a0a0a;
             padding: 20px;
-            border: 1px solid #333;
+            border: 1px solid #222;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-top: 15px;
+            border-left: 6px solid #FF0000;
         }
 
         .copy-btn {
             background: #FF0000;
-            color: white;
+            color: #fff;
             border: none;
-            padding: 8px 20px;
+            padding: 10px 20px;
             cursor: pointer;
             font-family: 'Finger Paint', cursive;
-            font-size: 0.8rem;
         }
+
+        .page { display: none; }
+        .page.active { display: block; }
     </style>
 </head>
 <body>
@@ -120,28 +132,23 @@
             <p>To use these moves for content, please credit me. For personal use or learning, no credit is needed.</p>
             
             <div class="video-box">
-                <iframe src="https://www.youtube.com/embed/DUqZNqbLF5g"></iframe>
+                <iframe src="https://www.youtube.com/embed/DUqZNqbLF5g" allowfullscreen></iframe>
             </div>
         </div>
 
         <div id="codes" class="page">
             <h1>Codes</h1>
             <p>Active viewer codes:</p>
-            <div class="code-container">
-                <span id="c1">JJS_SHENANIGANS_2026</span>
-                <button class="copy-btn" onclick="copyText('c1')">COPY</button>
+            <div class="code-row">
+                <span id="c1">JJS_GIFT_2026</span>
+                <button class="copy-btn" onclick="copy('c1')">COPY</button>
             </div>
-        </div>
-
-        <div id="movesets" class="page">
-            <h1>Movesets</h1>
-            <p>List of custom movesets coming soon...</p>
         </div>
 
         <div id="contact" class="page">
             <h1>Contact</h1>
-            <p>YouTube: <a href="https://www.youtube.com/@Thehonouredbro" style="color:#FF0000; text-decoration: none;">@Thehonouredbro</a></p>
-            <p>Discord: @your_username</p>
+            <p>Check out my full profile and socials here:</p>
+            <a href="https://guns.lol/azmi" target="_blank" class="guns-link">guns.lol/azmi</a>
         </div>
     </div>
 
@@ -153,10 +160,10 @@
             btn.classList.add('active');
         }
 
-        function copyText(id) {
+        function copy(id) {
             const text = document.getElementById(id).innerText;
             navigator.clipboard.writeText(text);
-            alert("Copied!");
+            alert("Code Copied: " + text);
         }
     </script>
 </body>
