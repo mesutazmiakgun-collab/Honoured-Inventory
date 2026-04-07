@@ -10,54 +10,101 @@
             --gold: #ffcc00; 
             --c-color: #ffcc00; 
         }
-        * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none; }
         
-        body { background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; background: radial-gradient(circle at 10% 50%, var(--g) 0%, #000 100%); }
-        
-        /* CURSOR TRAIL */
-        .tr { width: 12px; height: 12px; background: var(--c-color); position: fixed; border-radius: 50%; pointer-events: none; z-index: 100000; transform: translate(-50%, -50%); left: -100px; top: -100px; box-shadow: 0 0 10px var(--c-color); transition: background 0.3s; }
-        #c { width: 14px; height: 14px; box-shadow: 0 0 20px var(--c-color); z-index: 100001; }
+        /* RESTORED FULL LAYOUT & SCROLLBAR KILLER */
+        * { 
+            font-family: 'Finger Paint', cursive !important; 
+            box-sizing: border-box; 
+            cursor: none; 
+            scrollbar-width: none; 
+            -ms-overflow-style: none; 
+        }
+        *::-webkit-scrollbar { display: none !important; width: 0 !important; }
+
+        body { 
+            background: #000; 
+            color: #fff; 
+            margin: 0; 
+            display: flex; 
+            height: 100vh; 
+            width: 100vw;
+            overflow: hidden; 
+            background: radial-gradient(circle at 10% 50%, var(--g) 0%, #000 100%); 
+        }
         
         /* SIDEBAR */
-        .sd { width: 280px; min-width: 280px; background: rgba(5,5,5,.98); padding: 30px 20px; display: flex; flex-direction: column; border-right: 3px solid var(--p); z-index: 100; position: relative; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; }
+        .sd { 
+            width: 280px; 
+            min-width: 280px; 
+            background: rgba(5,5,5,.98); 
+            padding: 30px 20px; 
+            display: flex; 
+            flex-direction: column; 
+            border-right: 2px solid var(--p); 
+            z-index: 100; 
+            position: relative; 
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            overflow-y: auto;
+        }
         .sd.hidden { margin-left: -280px; }
-        #m-tog { position: fixed; top: 20px; left: 245px; background: var(--p); color: #fff; border: none; width: 35px; height: 35px; border-radius: 0 5px 5px 0; z-index: 1001; box-shadow: 0 0 10px var(--p); display: flex; align-items: center; justify-content: center; font-weight: bold; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        #m-tog { 
+            position: fixed; top: 20px; left: 245px; 
+            background: var(--p); color: #fff; border: none; 
+            width: 35px; height: 35px; border-radius: 0 5px 5px 0; 
+            z-index: 1001; box-shadow: 0 0 10px var(--p); 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
         .sd.hidden #m-tog { left: 0px; }
         
         .st { font-size: 1.8rem; color: var(--p); text-transform: uppercase; text-shadow: 0 0 10px var(--p); margin-bottom: 5px; }
         .rk { font-size: .8rem; color: var(--s); margin-bottom: 20px; letter-spacing: 2px; }
-        
         .cat-title { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 3px; margin: 15px 0 10px 5px; border-bottom: 1px solid #222; padding-bottom: 5px; }
 
         .nb { background: #000; border: 1px solid #444; color: #fff; padding: 12px; text-align: left; margin-bottom: 10px; width: 100%; display: block; text-decoration: none; transition: 0.2s; font-size: 0.9rem; cursor: none; }
         .nb.active { border: 2px solid var(--s) !important; box-shadow: 0 0 20px var(--s); background: #001; }
-        
         .soc-link { border-color: #333; color: #aaa; text-align: center; }
         .soc-link:hover { border-color: var(--s); color: var(--s); box-shadow: 0 0 10px var(--s); transform: scale(1.02); }
 
-        .set-btn { margin-top: 20px; background: #111; border: 2px solid #fff; color: #fff; padding: 12px; text-align: center; width: 100%; transition: 0.2s; }
-
         /* MAIN CONTENT */
-        .mc { flex: 1; padding: 50px 60px; overflow-y: auto; display: flex; flex-direction: column; align-items: stretch; transition: 0.5s; }
+        .mc { 
+            flex: 1; 
+            padding: 50px 60px; 
+            overflow-y: auto; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: stretch; 
+            transition: 0.5s; 
+            position: relative; 
+        }
         .page { display: none; width: 100%; } 
         .page.active { display: flex; flex-direction: column; align-items: center; text-align: center; }
 
         h1 { font-size: 4.5rem; margin: 0; color: var(--p); text-shadow: 4px 4px 0 #fff; }
 
+        /* VIDEO SHOWCASE BOX */
+        .vid-box { width: 100%; max-width: 850px; aspect-ratio: 16/9; background: #000; border: 3px solid var(--p); margin: 30px 0; box-shadow: 0 0 25px rgba(255,0,0,0.3); overflow: hidden; }
+        .vid-box iframe { width: 100%; height: 100%; border: none; }
+
+        /* VAULT CARD (Restored) */
+        .code-card { background: #050505; border: 2px solid var(--p); padding: 20px; margin: 20px 0; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 750px; box-shadow: 0 0 15px var(--p); }
+        .code-info { text-align: left; }
+        .code-name { color: var(--s); font-size: 1.2rem; display: block; text-transform: uppercase; }
+        #vault-text { height: 350px; font-family: monospace !important; margin-top: 20px; width: 100%; max-width: 850px; background: #050505; color: var(--s); border: 2px solid #333; padding: 15px; }
+
         /* FORMS */
         .f-container { width: 100%; max-width: 700px; display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
-        input, textarea { width: 100%; background: #050505; color: var(--s); border: 2px solid #333; padding: 15px; font-size: 1rem; outline: none; transition: border 0.3s; border-radius: 5px; }
+        input, textarea { width: 100%; background: #050505; color: var(--s); border: 2px solid #333; padding: 15px; font-size: 1rem; outline: none; border-radius: 5px; }
         
-        /* MODAL */
+        .set-btn { margin-top: 20px; background: #111; border: 2px solid #fff; color: #fff; padding: 12px; text-align: center; width: 100%; transition: 0.2s; }
         .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 1000; justify-content: center; align-items: center; }
         .sc { background: #0a0a0a; border: 4px solid var(--p); width: 450px; padding: 30px; box-shadow: 0 0 30px var(--p); }
-        .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .sw { width: 60px; height: 28px; background: #222; border-radius: 50px; position: relative; border: 1px solid #444; }
-        .kn { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: .3s; }
-        .sw.on { background: #0056b3 !important; } .sw.on .kn { transform: translateX(32px); }
-        
-        .sk { animation: sk .2s ease-in-out; } 
-        @keyframes sk { 0%,100%{transform:translateX(0)} 25%{transform:translateX(5px)} 75%{transform:translateX(-5px)} }
+
+        /* CURSOR TRAIL */
+        .tr { width: 12px; height: 12px; background: var(--c-color); position: fixed; border-radius: 50%; pointer-events: none; z-index: 100000; transform: translate(-50%, -50%); left: -100px; top: -100px; box-shadow: 0 0 10px var(--c-color); transition: background 0.3s; }
+        #c { width: 14px; height: 14px; box-shadow: 0 0 20px var(--c-color); z-index: 100001; }
+
         @keyframes gl { 0%, 6% { transform: translate(0); } 2% { transform: translate(-2px,2px); text-shadow: 4px 4px 0 #fff,-2px 0 var(--p); } 4% { transform: translate(2px,-2px); text-shadow: 4px 4px 0 #fff,2px 0 var(--s); } }
     </style>
 </head>
@@ -83,7 +130,7 @@
         
         <div class="cat-title">Channel Hub</div>
         <a href="https://youtube.com/@thehonouredbro" target="_blank" class="nb soc-link">YOUTUBE</a>
-        <a href="https://guns.lol/@azmi" target="_blank" class="nb soc-link">GUNS.LOL</a>
+        <a href="https://guns.lol/azmi" target="_blank" class="nb soc-link">GUNS.LOL</a>
 
         <button class="set-btn" onclick="tog()">SETTINGS ⚙️</button>
     </div>
@@ -91,7 +138,31 @@
     <div class="mc" id="b">
         <div id="home" class="page active">
             <h1 class="glitch" style="animation: gl 3s infinite;">Home</h1>
-            <p style="font-size: 1.2rem; margin-top: 20px;">Welcome to THE HONOURED INVENTORY.</p>
+            <div class="vid-box">
+                <iframe src="your-showcase-url-here" allow="autoplay; fullscreen" allowfullscreen></iframe>
+            </div>
+            <div style="font-size: 1.1rem; line-height: 1.6; max-width: 800px; color: #ccc; border: 1px solid #333; padding: 25px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                Welcome to THE HONOURED INVENTORY. Suit yourself with any animation or moveset or codes for movesets. 
+                <br><br>
+                <span style="color: var(--p); font-weight: bold;">Using my stuff for your own content requires credits and ONLY if it's for learning or personal use then credits is appreciated, which DOES NOT mean you can use it in ur vids—i mean like dont call it urs.</span>
+            </div>
+        </div>
+
+        <div id="codes" class="page">
+            <h1>Codes</h1>
+            <div class="code-card">
+                <div class="code-info"><span class="code-name">Inventory String 01</span><p style="color:#888">Standard secure data string.</p></div>
+                <button class="nb" style="width:auto; padding:10px 20px;" onclick="openVault('Inventory Code', 'YOUR-CODE-HERE')">VIEW CODE</button>
+            </div>
+        </div>
+
+        <div id="code-vault" class="page">
+            <h1 id="v-title">Vault</h1>
+            <textarea id="vault-text" readonly></textarea>
+            <div style="display:flex; gap:15px; margin-top:20px; width:100%; max-width:850px;">
+                <button class="nb active" style="flex:1; text-align:center;" onclick="copyFromVault()">COPY ALL</button>
+                <button class="nb" style="flex:1; text-align:center;" onclick="pg('codes', document.getElementById('btn-codes'))">BACK</button>
+            </div>
         </div>
 
         <div id="suggest" class="page">
@@ -111,14 +182,18 @@
             </div>
         </div>
 
-        <div id="codes" class="page"><h1>Codes</h1><p>Inventory empty.</p></div>
         <div id="movesets" class="page"><h1>Movesets</h1><p>Inventory empty.</p></div>
         <div id="animations" class="page"><h1>Animations</h1><p>No animations yet.</p></div>
     </div>
 
     <div class="mo" id="sMod"><div class="sc">
         <h2 style="color:var(--p)">AURA SETTINGS</h2>
-        <div class="row"><span>Music</span><div class="sw" id="mt" onclick="mu()"><div class="kn"></div></div></div>
+        <div class="row" style="display:flex; justify-content:space-between; align-items:center;">
+            <span>Music</span>
+            <div id="mt" onclick="mu()" style="width:50px; height:25px; background:#444; border-radius:15px; position:relative;">
+                <div class="kn" style="width:20px; height:20px; background:#fff; border-radius:50%; position:absolute; top:2.5px; left:2.5px; transition:0.3s;"></div>
+            </div>
+        </div>
         <button class="set-btn" onclick="tog()">CLOSE</button>
     </div></div>
 
@@ -127,51 +202,47 @@
         const trs = document.querySelectorAll('.tr');
         let coords = { x: 0, y: 0 };
 
-        // NAVIGATION
         function pg(id, btn) { 
-            const target = document.getElementById(id);
-            if(!target) return;
-            b.classList.add('sk'); setTimeout(()=>b.classList.remove('sk'),200); 
             document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); 
-            target.classList.add('active');
+            document.getElementById(id).classList.add('active');
             if(btn) { document.querySelectorAll('.nb').forEach(n=>n.classList.remove('active')); btn.classList.add('active'); }
         }
 
-        // FORMSPREE LOGIC
+        // VAULT LOGIC (Restored)
+        function openVault(title, code) {
+            document.getElementById('v-title').innerText = title;
+            document.getElementById('vault-text').value = code;
+            pg('code-vault');
+        }
+        function copyFromVault() {
+            const vt = document.getElementById('vault-text');
+            vt.select();
+            navigator.clipboard.writeText(vt.value);
+            alert("Copied to clipboard!");
+        }
+
         async function sendToFormspree(id, data, btnId) {
             const btn = document.getElementById(btnId);
-            const originalText = btn.innerText;
             btn.innerText = "SENDING...";
             try {
-                const response = await fetch(`https://formspree.io/f/${id}`, { 
-                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) 
-                });
-                if(response.ok) alert("Successfully sent!"); else alert("Error sending.");
+                const response = await fetch(`https://formspree.io/f/${id}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+                if(response.ok) alert("Sent!"); else alert("Error.");
             } catch (e) { alert("Network error."); }
-            btn.innerText = originalText;
+            btn.innerText = "SEND";
         }
 
-        function sendSuggest() {
-            const msg = document.getElementById('suggest-text').value;
-            if(!msg.trim()) return alert("Message cannot be empty.");
-            sendToFormspree("xnjowojl", { category: "Suggestion", message: msg }, "send-btn");
-            document.getElementById('suggest-text').value = "";
-        }
+        function sendSuggest() { sendToFormspree("xnjowojl", { msg: document.getElementById('suggest-text').value }, "send-btn"); }
+        function sendContact() { sendToFormspree("xdapbyva", { sub: document.getElementById('c-subject').value, msg: document.getElementById('c-message').value }, "contact-btn"); }
 
-        function sendContact() {
-            const sub = document.getElementById('c-subject').value;
-            const msg = document.getElementById('c-message').value;
-            if(!msg.trim()) return alert("Message cannot be empty.");
-            sendToFormspree("xdapbyva", { subject: sub, message: msg }, "contact-btn");
-            document.getElementById('c-subject').value = ""; document.getElementById('c-message').value = "";
-        }
-
-        // UI ACTIONS
         function tgs() { side.classList.toggle('hidden'); document.getElementById('m-tog').innerText = side.classList.contains('hidden') ? '»' : '«'; }
         function tog() { mod.style.display = (mod.style.display=='flex')?'none':'flex'; }
-        function mu() { if(music.paused){ music.play(); document.getElementById('mt').classList.add('on'); } else { music.pause(); document.getElementById('mt').classList.remove('on'); } }
+        
+        function mu() { 
+            const kn = document.querySelector('.kn');
+            if(music.paused){ music.play(); kn.style.left = '27.5px'; } 
+            else { music.pause(); kn.style.left = '2.5px'; } 
+        }
 
-        // MOUSE TRAIL
         document.addEventListener('mousemove', e => { coords.x = e.clientX; coords.y = e.clientY; });
         function updateTrail() {
             let x = coords.x; let y = coords.y;
@@ -183,7 +254,6 @@
         }
         updateTrail();
 
-        // RANK SYSTEM
         let pts = 0;
         setInterval(() => { pts++; const rk=["UNRANKED","GRADE 4","GRADE 3","GRADE 2","GRADE 1","SPECIAL GRADE","HONOURED"]; document.getElementById('r').innerText="RANK: "+rk[Math.min(Math.floor(pts/10),6)]; }, 1000);
     </script>
