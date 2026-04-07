@@ -8,20 +8,20 @@
         :root { 
             --p: #f00; --s: #5ab9ff; --g: #300; --w: #fff; 
             --gold: #ffcc00; 
-            --c-color: #ffcc00; /* Default cursor color */
+            --c-color: #ffcc00; 
         }
         * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none; }
         
         body { background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; background: radial-gradient(circle at 10% 50%, var(--g) 0%, #000 100%); }
         
-        /* ADAPTIVE GOLD CURSOR */
+        /* ADAPTIVE CURSOR */
         .tr { 
             width: 12px; height: 12px; background: var(--c-color); 
             position: fixed; border-radius: 50%; pointer-events: none; 
             z-index: 10000; transform: translate(-50%, -50%); 
             left: -100px; top: -100px;
             box-shadow: 0 0 10px var(--c-color);
-            transition: background 0.3s, box-shadow 0.3s;
+            transition: background 0.3s;
         }
         #c { width: 14px; height: 14px; box-shadow: 0 0 20px var(--c-color); z-index: 10001; }
         
@@ -72,14 +72,18 @@
         .cl::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 5px; background: #fff; animation: pulse 1.5s infinite alternate; }
         @keyframes pulse { 0% { box-shadow: 0 0 5px #fff; opacity: 0.6; } 100% { box-shadow: 0 0 25px #fff, 0 0 45px #fff; opacity: 1; } }
 
-        /* Settings */
+        /* SETTINGS */
         .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 1000; justify-content: center; align-items: center; }
         .sc { background: #0a0a0a; border: 4px solid var(--p); width: 450px; padding: 30px; box-shadow: 0 0 30px var(--p); }
         .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .th { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; }
+        
+        /* SWITCH LOGIC - Forced Visibility Fix */
         .sw { width: 60px; height: 28px; background: #222; border-radius: 50px; position: relative; border: 1px solid #444; }
-        .kn { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: .3s; }
-        .sw.on { background: var(--s); } .sw.on .kn { transform: translateX(32px); }
+        .kn { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: .3s; z-index: 2; }
+        .sw.on { background: #0056b3 !important; border-color: #0056b3; box-shadow: 0 0 10px #0056b3; } 
+        .sw.on .kn { transform: translateX(32px); }
+        
         .sk { animation: sk .2s ease-in-out; } @keyframes sk { 0%,100%{transform:translateX(0)} 25%{transform:translateX(5px)} 75%{transform:translateX(-5px)} }
     </style>
 </head>
@@ -158,7 +162,6 @@
             document.documentElement.style.setProperty('--s',t[1]); 
             document.documentElement.style.setProperty('--g',t[2]); 
 
-            // Adaptive Cursor Logic
             if(c === 'gold') {
                 document.documentElement.style.setProperty('--c-color', '#f00');
             } else {
