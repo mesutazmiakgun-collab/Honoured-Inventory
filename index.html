@@ -71,6 +71,7 @@
             padding: 15px;
             cursor: pointer;
             text-align: center;
+            font-size: 0.8rem;
         }
 
         /* JJS Style Settings Modal */
@@ -78,79 +79,118 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.9);
             z-index: 100;
             justify-content: center;
             align-items: center;
         }
 
         .settings-card {
-            background: rgba(15, 15, 15, 0.95);
+            background: rgba(10, 10, 10, 0.98);
             border: 4px solid #FF0000;
-            width: 450px;
-            padding: 30px;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            width: 480px;
+            padding: 40px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.3);
         }
 
         .settings-header {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #FF0000;
-            border-bottom: 2px solid #FF0000;
-            margin-bottom: 25px;
+            border-bottom: 2px solid #333;
+            margin-bottom: 30px;
             padding-bottom: 10px;
-            text-align: center;
+            text-align: left;
         }
 
         .setting-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
         }
 
-        /* JJS Toggle Switch */
-        .toggle-box {
-            background: #222;
-            border: 2px solid #444;
-            padding: 8px 20px;
+        /* --- THE NEW SLIDER SWITCH --- */
+        .switch-container {
+            position: relative;
+            width: 65px;
+            height: 30px;
+            background: #333;
+            border-radius: 30px; /* Pill shape */
             cursor: pointer;
-            color: #fff;
-            transition: 0.2s;
+            transition: background 0.3s;
+            border: 1px solid #555;
         }
-        .toggle-box.on { border-color: #5ab9ff; color: #5ab9ff; box-shadow: 0 0 10px #5ab9ff; }
 
+        .switch-handle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* State when music is ON */
+        .switch-container.active {
+            background: #5ab9ff;
+            box-shadow: 0 0 15px rgba(90, 185, 255, 0.4);
+            border-color: #fff;
+        }
+
+        .switch-container.active .switch-handle {
+            transform: translateX(35px); /* Moves it to the right side */
+        }
+
+        /* --- VOLUME SLIDER --- */
+        .volume-wrapper { width: 180px; }
         input[type="range"] {
-            accent-color: #FF0000;
+            -webkit-appearance: none;
+            width: 100%;
+            background: #222;
+            height: 6px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 24px;
+            background: #FF0000;
+            border: 2px solid #fff;
             cursor: pointer;
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
         }
 
         .help-btn {
             width: 100%;
-            background: #FF0000;
+            background: #222;
             color: #fff;
-            border: 2px solid #fff;
-            padding: 10px;
+            border: 2px solid #FF0000;
+            padding: 15px;
             margin-top: 20px;
             cursor: pointer;
+            transition: 0.3s;
         }
+        .help-btn:hover { background: #FF0000; }
 
         .close-settings {
             display: block;
-            margin: 20px auto 0;
+            margin: 25px auto 0;
             background: none;
             border: none;
-            color: #888;
+            color: #FF0000;
             cursor: pointer;
-            text-decoration: underline;
+            text-transform: uppercase;
         }
 
         /* Main Content */
-        .main-content { flex-grow: 1; padding: 60px; overflow-y: auto; position: relative; }
+        .main-content { flex-grow: 1; padding: 60px; overflow-y: auto; }
         h1 { font-size: 4.5rem; margin: 0 0 20px 0; color: #FF0000; text-shadow: 4px 4px 0px #fff; letter-spacing: -3px; }
         .status-msg { font-size: 1.5rem; color: #555; border: 2px dashed #333; padding: 40px; text-align: center; margin-top: 20px; }
-        .welcome-text { font-size: 1.4rem; line-height: 1.5; max-width: 900px; color: #fff; margin-bottom: 40px; }
-        .video-container { max-width: 850px; aspect-ratio: 16/9; border: 6px solid #FF0000; box-shadow: 0 0 50px rgba(255, 0, 0, 0.4); }
-        iframe { width: 100%; height: 100%; border: none; }
         .page { display: none; }
         .page.active { display: block; }
     </style>
@@ -163,13 +203,11 @@
 
     <div class="sidebar">
         <div class="sidebar-title">Honoured<br>Inventory</div>
-        
         <button class="nav-btn active" onclick="showPage('home', this)">Home</button>
         <button class="nav-btn" onclick="showPage('codes', this)">Codes</button>
         <button class="nav-btn" onclick="showPage('movesets', this)">Movesets</button>
         <button class="nav-btn" onclick="showPage('animations', this)">Animations</button>
         <button class="nav-btn" onclick="showPage('contact', this)">Contact</button>
-
         <button class="settings-btn" onclick="toggleSettings()">SETTINGS ⚙️</button>
     </div>
 
@@ -179,57 +217,40 @@
             
             <div class="setting-row">
                 <span>Music Toggle</span>
-                <div class="toggle-box" id="musicToggle" onclick="toggleMusic()">OFF</div>
+                <div class="switch-container" id="musicToggle" onclick="toggleMusic()">
+                    <div class="switch-handle"></div>
+                </div>
             </div>
 
             <div class="setting-row">
                 <span>Volume</span>
-                <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.4" oninput="updateVol()">
+                <div class="volume-wrapper">
+                    <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.4" oninput="updateVol()">
+                </div>
             </div>
 
             <button class="help-btn" onclick="showHelp()">HOW TO USE SITE</button>
-            
-            <button class="close-settings" onclick="toggleSettings()">BACK TO SITE</button>
+            <button class="close-settings" onclick="toggleSettings()">CLOSE</button>
         </div>
     </div>
 
     <div class="main-content">
         <div id="home" class="page active">
             <h1>Home</h1>
-            <div class="welcome-text">
-                Welcome to THE HONOURED INVENTORY. Suit yourself with any animation or moveset or codes for movesets. 
-                <br><br>
-                Using my stuff for your own content requires credits and ONLY if it's for learning or personal use then credits is appreciated.
-            </div>
-            <div class="video-container">
-                <iframe src="https://www.youtube.com/embed/DUqZNqbLF5g" allowfullscreen></iframe>
+            <p style="font-size: 1.4rem;">Welcome to THE HONOURED INVENTORY. Suit yourself with any animation or moveset.</p>
+            <div style="max-width: 850px; aspect-ratio: 16/9; border: 6px solid #FF0000; box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);">
+                <iframe src="https://www.youtube.com/embed/DUqZNqbLF5g" style="width:100%; height:100%; border:none;" allowfullscreen></iframe>
             </div>
         </div>
-
-        <div id="codes" class="page">
-            <h1>Codes</h1>
-            <div class="status-msg">No codes yet.</div>
-        </div>
-
-        <div id="movesets" class="page">
-            <h1>Movesets</h1>
-            <div class="status-msg">Inventory currently empty.</div>
-        </div>
-
-        <div id="animations" class="page">
-            <h1>Animations</h1>
-            <div class="status-msg">No custom animations uploaded yet.</div>
-        </div>
-
-        <div id="contact" class="page">
-            <h1>Contact</h1>
-            <a href="https://guns.lol/azmi" target="_blank" style="color:#FF0000; font-size: 2rem;">guns.lol/azmi</a>
-        </div>
+        <div id="codes" class="page"><h1>Codes</h1><div class="status-msg">No codes yet.</div></div>
+        <div id="movesets" class="page"><h1>Movesets</h1><div class="status-msg">Inventory empty.</div></div>
+        <div id="animations" class="page"><h1>Animations</h1><div class="status-msg">No animations yet.</div></div>
+        <div id="contact" class="page"><h1>Contact</h1><a href="https://guns.lol/azmi" target="_blank" style="color:#FF0000; font-size: 2rem;">guns.lol/azmi</a></div>
     </div>
 
     <script>
         const music = document.getElementById('bgMusic');
-        const mBtn = document.getElementById('musicToggle');
+        const mToggle = document.getElementById('musicToggle');
         const modal = document.getElementById('settingsModal');
         const volSlider = document.getElementById('volSlider');
 
@@ -240,13 +261,11 @@
         function toggleMusic() {
             if (music.paused) {
                 music.play().then(() => {
-                    mBtn.innerText = "ON";
-                    mBtn.classList.add('on');
-                }).catch(e => console.log("Play failed:", e));
+                    mToggle.classList.add('active');
+                }).catch(e => alert("Please interact with the page first!"));
             } else {
                 music.pause();
-                mBtn.innerText = "OFF";
-                mBtn.classList.remove('on');
+                mToggle.classList.remove('active');
             }
         }
 
@@ -255,7 +274,7 @@
         }
 
         function showHelp() {
-            alert("1. Use the Sidebar to navigate between Codes, Movesets, and Animations.\n2. Click 'Settings' to adjust the music and volume.\n3. Content used from this site MUST be credited to AzmiYT.\n4. If a code is available, clicking 'View' will allow you to copy it instantly.");
+            alert("Honoured Inventory Guide:\n\n1. Navigation: Sidebar links.\n2. Settings: Use the slider to toggle music.\n3. Volume: Adjust the slider bar.\n4. Credits: Always credit AzmiYT.");
         }
 
         function showPage(pageId, btn) {
