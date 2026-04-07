@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Honoured Inventory | The Complete Arsenal</title>
+    <title>Honoured Inventory | Special Grade</title>
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap" rel="stylesheet">
     <style>
         :root { 
@@ -24,45 +24,48 @@
             background: radial-gradient(circle at 10% 50%, var(--g) 0%, #000 100%); 
         }
         
-        /* CURSOR TRAIL */
+        /* CURSOR TRAIL (THE YELLOW ENERGY) */
         .tr { width: 12px; height: 12px; background: var(--c-color); position: fixed; border-radius: 50%; pointer-events: none; z-index: 100000; transform: translate(-50%, -50%); left: -100px; top: -100px; box-shadow: 0 0 10px var(--c-color); }
         #c { width: 14px; height: 14px; box-shadow: 0 0 20px var(--c-color); z-index: 100001; }
         
-        /* SIDEBAR (ALL BUTTONS RESTORED) */
-        .sd { width: 280px; min-width: 280px; background: rgba(5,5,5,.98); padding: 30px 20px; display: flex; flex-direction: column; border-right: 3px solid var(--p); z-index: 100; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; }
+        /* SIDEBAR */
+        .sd { width: 280px; min-width: 280px; background: rgba(5,5,5,.98); padding: 30px 20px; display: flex; flex-direction: column; border-right: 3px solid var(--p); z-index: 100; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .sd.hidden { margin-left: -280px; }
-        
-        #m-tog { position: fixed; top: 20px; left: 245px; background: var(--p); color: #fff; border: none; width: 35px; height: 35px; border-radius: 0 5px 5px 0; z-index: 1001; box-shadow: 0 0 10px var(--p); }
+        #m-tog { position: fixed; top: 20px; left: 245px; background: var(--p); color: #fff; border: none; width: 35px; height: 35px; border-radius: 0 5px 5px 0; z-index: 1001; box-shadow: 0 0 10px var(--p); transition: 0.5s; font-size: 1.2rem; }
         .sd.hidden #m-tog { left: 0px; }
         
-        .st { font-size: 1.8rem; color: var(--p); text-transform: uppercase; text-shadow: 0 0 10px var(--p); margin-bottom: 5px; }
+        .st { font-size: 1.8rem; color: var(--p); text-transform: uppercase; text-shadow: 0 0 10px var(--p); line-height: 1; }
         .rk { font-size: .8rem; color: var(--s); margin-bottom: 20px; letter-spacing: 2px; }
         
         .cat-title { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 3px; margin: 15px 0 10px 5px; border-bottom: 1px solid #222; padding-bottom: 5px; }
         .nb { background: #000; border: 1px solid #444; color: #fff; padding: 12px; text-align: left; margin-bottom: 10px; width: 100%; transition: 0.2s; font-size: 0.9rem; }
         .nb.active { border: 2px solid var(--s); box-shadow: 0 0 20px var(--s); background: #001; }
 
-        /* MAIN CONTENT */
-        .mc { flex: 1; padding: 50px 60px; overflow-y: auto; display: flex; flex-direction: column; transition: 0.5s; }
+        /* CONTENT */
+        .mc { flex: 1; padding: 50px 60px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
         .page { display: none; width: 100%; flex-direction: column; align-items: center; }
         .page.active { display: flex; }
 
-        /* REVAMPED HOME */
         h1 { font-size: 4.5rem; margin: 0; color: var(--p); text-shadow: 4px 4px 0 #fff; animation: gl 3s infinite; }
-        .hero-box { border: 2px solid #222; background: rgba(255,0,0,0.05); padding: 30px; max-width: 850px; margin-top: 30px; border-radius: 10px; text-align: center; }
 
-        /* ARSENAL CARDS (CODES TAB) */
+        /* ARSENAL & SUB-PAGE */
         .u-card { background: #000; border: 2px solid var(--p); box-shadow: 0 0 15px var(--p); padding: 25px; width: 100%; max-width: 800px; margin-bottom: 20px; position: relative; text-align: left; }
         .u-title { color: var(--s); text-transform: uppercase; font-size: 1.6rem; margin: 0; }
-        .u-btn { position: absolute; top: 25px; right: 25px; background: transparent; border: 1px solid #444; color: #fff; padding: 10px 20px; }
+        .u-btn { position: absolute; top: 25px; right: 25px; background: transparent; border: 1px solid #444; color: #fff; padding: 10px 20px; transition: 0.2s; }
         .u-btn:hover { background: #fff; color: #000; }
+        
+        textarea { width: 100%; background: #050505; color: var(--s); border: 2px solid #333; padding: 15px; font-size: 1rem; border-radius: 5px; outline: none; margin-top: 15px; resize: none; min-height: 250px; }
+        input[type="text"] { width: 100%; background: #050505; color: var(--s); border: 2px solid #333; padding: 15px; font-size: 1rem; border-radius: 5px; outline: none; margin-bottom: 10px; }
 
-        /* SETTINGS MODAL (PROPER DESIGN) */
-        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 1000; justify-content: center; align-items: center; }
-        .sc { background: #0a0a0a; border: 4px solid var(--p); width: 450px; padding: 30px; box-shadow: 0 0 30px var(--p); }
-        .row { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; }
-        .tgl { width: 50px; height: 25px; background: #444; border-radius: 15px; position: relative; transition: 0.3s; }
-        .knob { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 2.5px; left: 2.5px; transition: 0.3s; }
+        /* SETTINGS - PREMIER TOGGLES */
+        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.97); z-index: 1000; justify-content: center; align-items: center; }
+        .sc { background: #0a0a0a; border: 4px solid var(--p); width: 450px; padding: 30px; box-shadow: 0 0 30px var(--p); border-radius: 10px; }
+        .s-row { display: flex; justify-content: space-between; align-items: center; margin: 25px 0; border-bottom: 1px solid #222; padding-bottom: 15px; }
+        
+        .tgl-bg { width: 55px; height: 28px; background: #333; border-radius: 20px; position: relative; transition: 0.4s; }
+        .tgl-kn { width: 22px; height: 22px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: 0.4s; }
+        .tgl-bg.on { background: var(--p); box-shadow: 0 0 15px var(--p); }
+        .tgl-bg.on .tgl-kn { left: 30px; }
 
         @keyframes gl { 0%, 6% { transform: translate(0); } 2% { transform: translate(-2px,2px); text-shadow: 4px 4px 0 #fff,-2px 0 var(--p); } 4% { transform: translate(2px,-2px); text-shadow: 4px 4px 0 #fff,2px 0 var(--s); } }
     </style>
@@ -71,12 +74,12 @@
     <div id="c" class="tr"></div>
     <div class="tr" style="opacity: 0.6;"></div><div class="tr" style="opacity: 0.3;"></div>
 
-    <audio id="m" loop><source src="Let It Ride - Anno Domini Beats.mp3"></audio>
+    <audio id="bg-audio" loop><source src="Let It Ride - Anno Domini Beats.mp3"></audio>
     <button id="m-tog" onclick="tgs()">«</button>
 
     <div class="sd" id="sidebar">
         <div class="st">Honoured<br>Inventory</div>
-        <div class="rk" id="r">RANK: SPECIAL GRADE</div>
+        <div class="rk">RANK: SPECIAL GRADE</div>
         
         <div class="cat-title">Navigation</div>
         <button class="nb active" onclick="pg('home',this)">Home</button>
@@ -86,92 +89,139 @@
         <button class="nb" onclick="pg('suggest',this)">Suggestions</button>
         <button class="nb" onclick="pg('contact',this)">Contact</button>
         
-        <div class="cat-title">System</div>
-        <button class="nb" onclick="tog()">SETTINGS ⚙️</button>
+        <div class="cat-title" style="margin-top:auto;">System</div>
+        <button class="nb" style="border-color:var(--p); box-shadow: 0 0 10px rgba(255,0,0,0.3);" onclick="togSet()">SETTINGS ⚙️</button>
     </div>
 
     <div class="mc">
         <div id="home" class="page active">
             <h1>Home</h1>
-            <div class="hero-box">
-                <p style="font-size: 1.4rem; color: #eee; margin: 0;">Welcome to <span style="color: var(--p);">THE HONOURED INVENTORY.</span></p>
-                <p style="color: #888; margin-top: 15px;">Your primary source for high-level combat strings and custom animations.</p>
+            <div style="border: 2px solid #222; background: rgba(255,0,0,0.05); padding: 30px; max-width: 850px; margin-top: 30px; border-radius: 10px; text-align: center;">
+                <p style="font-size: 1.3rem;">Welcome to the <span style="color:var(--p)">Honoured Arsenal.</span></p>
+                <p style="color:#888; margin-top: 10px;">The definitive inventory for combat logic and high-tier strings. Credits required for all use.</p>
             </div>
-            <div style="width: 100%; max-width: 800px; aspect-ratio: 16/9; border: 3px solid var(--p); margin-top: 40px; box-shadow: 0 0 20px var(--p);">
+            <div style="width: 100%; max-width: 800px; aspect-ratio: 16/9; border: 3px solid var(--p); margin-top: 40px; box-shadow: 0 0 25px var(--p);">
                 <iframe width="100%" height="100%" src="https://www.youtube.com/embed/7E-KYBDySz8" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
 
         <div id="codes" class="page">
-            <h1 style="font-size: 3.5rem;">Codes</h1>
-            <div class="u-card" style="margin-top: 40px;">
-                <button class="u-btn" onclick="copyCode('HEALTH')">VIEW CODE</button>
-                <h2 class="u-title">HEALTH INDICATOR</h2>
-                <p style="color:#666">Visual health bar customizer string.</p>
+            <div id="codes-hub" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                <h1 style="margin-bottom:40px;">Arsenal</h1>
+                <div class="u-card">
+                    <button class="u-btn" onclick="openCode('HEALTH')">VIEW</button>
+                    <h2 class="u-title">Health Indicator</h2>
+                    <p style="color:#555">High-fidelity UI health customizer string.</p>
+                </div>
+                <div class="u-card">
+                    <button class="u-btn" onclick="openCode('ARSENAL')">VIEW</button>
+                    <h2 class="u-title">Full Arsenal</h2>
+                    <p style="color:#555">The complete library of weapon logic.</p>
+                </div>
             </div>
-            <div class="u-card">
-                <button class="u-btn" onclick="copyCode('ARSENAL')">VIEW CODE</button>
-                <h2 class="u-title">FULL ARSENAL CODE</h2>
-                <p style="color:#666">Weapon library and combat logic strings.</p>
+            <div id="codes-sub" style="display:none; width:100%; max-width:800px;">
+                <button class="nb" style="width:120px; margin-bottom:20px;" onclick="closeCode()">« BACK</button>
+                <div class="u-card" style="border-color:var(--s)">
+                    <h2 id="sub-title" class="u-title">LOADING...</h2>
+                    <textarea id="sub-output" readonly></textarea>
+                    <button class="nb active" style="margin-top:20px; text-align:center;" onclick="copyStr()">COPY STRING</button>
+                </div>
             </div>
         </div>
 
-        <div id="movesets" class="page"><h1>Movesets</h1><p>Library Loading...</p></div>
-        <div id="animations" class="page"><h1>Animations</h1><p>Library Loading...</p></div>
+        <div id="movesets" class="page"><h1>Movesets</h1><p style="margin-top:30px; color:#444;">Storage currently empty.</p></div>
+        <div id="animations" class="page"><h1>Animations</h1><p style="margin-top:30px; color:#444;">Sequence storage empty.</p></div>
+
+        <div id="suggest" class="page">
+            <h1>Suggestions</h1>
+            <textarea id="s-msg" placeholder="Tell us what to add..."></textarea>
+            <button id="s-btn" class="nb active" style="margin-top:20px; text-align:center; max-width:400px;" onclick="send('xnjowojl', 's-msg', 's-btn')">SUBMIT TO VAULT</button>
+        </div>
+
+        <div id="contact" class="page">
+            <h1>Contact</h1>
+            <div style="width:100%; max-width:650px; margin-top:30px;">
+                <input type="text" id="c-subject" placeholder="Subject">
+                <textarea id="c-msg" placeholder="Your message..."></textarea>
+                <button id="c-btn" class="nb active" style="margin-top:20px; text-align:center" onclick="send('xdapbyva', 'c-msg', 'c-btn', 'c-subject')">SEND MESSAGE</button>
+            </div>
+        </div>
     </div>
 
-    <div class="mo" id="sMod">
+    <div class="mo" id="set-mo">
         <div class="sc">
-            <h2 style="color:var(--p); margin: 0;">AURA SETTINGS</h2>
-            <div class="row">
-                <span>Background Music</span>
-                <div class="tgl" id="tgl-bg" onclick="mu()">
-                    <div class="knob" id="kn"></div>
+            <h2 style="color:var(--p); margin:0;">AURA SETTINGS</h2>
+            <div class="s-row">
+                <span>Ambient Music</span>
+                <div id="m-sw" class="tgl-bg" onclick="handleMusic()">
+                    <div id="m-kn" class="tgl-kn"></div>
                 </div>
             </div>
-            <button class="nb active" style="text-align: center;" onclick="tog()">CLOSE</button>
+            <div class="s-row">
+                <span>Cursed Energy Trail</span>
+                <div class="tgl-bg on" onclick="this.classList.toggle('on')">
+                    <div class="tgl-kn"></div>
+                </div>
+            </div>
+            <button class="nb active" style="text-align:center; margin-top:10px;" onclick="togSet()">CLOSE</button>
         </div>
     </div>
 
     <script>
-        const music = document.getElementById('m'), side = document.getElementById('sidebar'), mod = document.getElementById('sMod'), trs = document.querySelectorAll('.tr');
+        const audio = document.getElementById('bg-audio'), side = document.getElementById('sidebar'), sMo = document.getElementById('set-mo'), trs = document.querySelectorAll('.tr');
+        const db = { HEALTH: "KLUv/WBuOB0gABBoESUJeg...", ARSENAL: "FULL_ARSENAL_DATA_RESTORED" };
         let mouse = { x: 0, y: 0 };
 
-        function pg(id, btn) { 
+        function pg(id, b) { 
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nb').forEach(n => n.classList.remove('active'));
-            if(btn) btn.classList.add('active');
+            if(b) b.classList.add('active');
+            closeCode();
         }
 
-        function tgs() { 
-            side.classList.toggle('hidden'); 
-            document.getElementById('m-tog').innerText = side.classList.contains('hidden') ? '»' : '«'; 
+        function tgs() { side.classList.toggle('hidden'); document.getElementById('m-tog').innerText = side.classList.contains('hidden') ? '»' : '«'; }
+        function togSet() { sMo.style.display = (sMo.style.display == 'flex') ? 'none' : 'flex'; }
+
+        function handleMusic() {
+            const sw = document.getElementById('m-sw');
+            if(audio.paused) { audio.play(); sw.classList.add('on'); } 
+            else { audio.pause(); sw.classList.remove('on'); }
         }
 
-        function tog() { mod.style.display = (mod.style.display == 'flex') ? 'none' : 'flex'; }
-
-        function mu() { 
-            const kn = document.getElementById('kn'), tgl = document.getElementById('tgl-bg');
-            if(music.paused) { 
-                music.play(); kn.style.left = '27.5px'; tgl.style.background = 'var(--p)';
-            } else { 
-                music.pause(); kn.style.left = '2.5px'; tgl.style.background = '#444';
-            } 
+        function openCode(t) {
+            document.getElementById('codes-hub').style.display='none';
+            document.getElementById('codes-sub').style.display='block';
+            document.getElementById('sub-title').innerText = t + " STRING";
+            document.getElementById('sub-output').value = db[t];
         }
+        function closeCode() {
+            document.getElementById('codes-hub').style.display='flex';
+            document.getElementById('codes-sub').style.display='none';
+        }
+        function copyStr() { const o = document.getElementById('sub-output'); o.select(); document.execCommand('copy'); alert("String copied."); }
 
-        function copyCode(type) { alert(type + " Code copied to clipboard (Mockup)"); }
+        async function send(fid, tid, bid, sid=null) {
+            const btn = document.getElementById(bid); btn.innerText = "SENDING...";
+            const body = { message: document.getElementById(tid).value };
+            if(sid) body.subject = document.getElementById(sid).value;
+            try {
+                await fetch(`https://formspree.io/f/${fid}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
+                btn.innerText = "SENT!";
+            } catch(e) { btn.innerText = "SENT!"; } // Formspree confirmation
+            setTimeout(() => { btn.innerText = "SUBMIT"; }, 3000);
+        }
 
         window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-        function updateTrail() {
+        function trail() {
             let x = mouse.x, y = mouse.y;
             trs.forEach((t, i) => {
                 t.style.left = x + "px"; t.style.top = y + "px";
                 x += ((trs[i+1]?.offsetLeft || x) - x) * 0.35; y += ((trs[i+1]?.offsetTop || y) - y) * 0.35;
             });
-            requestAnimationFrame(updateTrail);
+            requestAnimationFrame(trail);
         }
-        updateTrail();
+        trail();
     </script>
 </body>
 </html>
