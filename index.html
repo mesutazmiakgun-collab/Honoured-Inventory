@@ -1,200 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Honoured | Absolute Inventory</title>
-    <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap" rel="stylesheet">
-    <style>
-        /* CORE THEME LOCKDOWN */
-        :root { 
-            --p: #f00; --s: #5ab9ff; --g: #300; --c: #ffcc00;
-            --ce: #00e5ff; /* Cursed Energy Blue */
-            --side-bg: rgba(5, 5, 5, 0.98);
-        }
-        * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none !important; scrollbar-width: none; }
-        *::-webkit-scrollbar { display: none !important; }
+<style>
+    /* ... existing styles ... */
 
-        body { 
-            background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; 
-            background: radial-gradient(circle at 15% 50%, var(--g) 0%, #000 100%); 
-        }
-
-        /* CURSOR ENERGY LOCKDOWN - FIXED SETTINGS VISIBILITY */
-        .tr { 
-            width: 14px; height: 14px; 
-            background: var(--ce); /* Changed to CE Blue */
-            position: fixed; border-radius: 50%; 
-            pointer-events: none; 
-            z-index: 1000000; /* MAX Z-INDEX: FLOATS ABOVE SETTINGS */
-            transform: translate(-50%, -50%); 
-            box-shadow: 0 0 20px var(--ce), 0 0 40px var(--s);
-            transition: width 0.2s, height 0.2s;
-            mix-blend-mode: screen;
-        }
+    /* SIDEBAR LOCKDOWN - UPDATED FOR SCROLLING */
+    .sd { 
+        width: 320px; 
+        background: var(--side-bg); 
+        backdrop-filter: blur(25px); 
+        padding: 45px 30px; 
+        display: flex; 
+        flex-direction: column; 
+        border-right: 3px solid var(--p); 
+        z-index: 100; 
+        transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+        box-shadow: 20px 0 60px rgba(0,0,0,1);
         
-        /* VISUAL EFFECTS LOCKDOWN */
-        #crt { position: fixed; inset: 0; pointer-events: none; z-index: 9999; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); background-size: 100% 2px, 2px 100%; display: none; }
+        /* THE FIX: Enable scrolling but hide the bar */
+        overflow-y: auto;
+        scrollbar-width: none; /* Firefox */
+    }
+    .sd::-webkit-scrollbar {
+        display: none; /* Chrome/Safari/Edge */
+    }
 
-        /* SIDEBAR LOCKDOWN */
-        .sd { width: 320px; background: var(--side-bg); backdrop-filter: blur(25px); padding: 45px 30px; display: flex; flex-direction: column; border-right: 3px solid var(--p); z-index: 100; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 60px rgba(0,0,0,1); }
-        .sd.hidden { margin-left: -320px; }
-        
-        #tog { position: fixed; top: 25px; left: 280px; background: var(--p); color: #fff; border: none; width: 45px; height: 45px; border-radius: 8px; z-index: 1001; transition: 0.4s; box-shadow: 0 0 20px var(--p); font-size: 1.2rem; }
-        .sd.hidden #tog { left: 15px; border-radius: 50%; }
+    /* Adding a fade effect at the bottom so you know it scrolls */
+    .sd::after {
+        content: "";
+        position: sticky;
+        bottom: -45px;
+        left: 0;
+        width: 100%;
+        height: 40px;
+        background: linear-gradient(transparent, var(--g));
+        pointer-events: none;
+    }
 
-        .st { font-size: 2.5rem; color: #fff; text-transform: uppercase; line-height: 0.8; margin-bottom: 10px; letter-spacing: -2px; }
-        .st span { color: var(--p); text-shadow: 0 0 25px var(--p); }
-        .rk { font-size: .7rem; color: var(--c); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 40px; background: rgba(255,204,0,0.1); padding: 5px 12px; border-radius: 4px; display: inline-block; border: 1px solid rgba(255,204,0,0.2); }
-
-        .nb { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); color: #777; padding: 20px; text-align: left; margin-bottom: 12px; width: 100%; transition: 0.3s; font-size: 0.95rem; border-radius: 6px; }
-        .nb:hover { transform: translateX(15px); border-color: var(--p); color: #CE Blue; background: rgba(0, 229, 255, 0.05); }
-        .nb.active { border-color: var(--s); color: var(--s); background: rgba(90, 185, 255, 0.05); box-shadow: 0 0 25px rgba(90,185,255,0.15); }
-
-        /* VIEWPORT LOCKDOWN */
-        .mc { flex: 1; padding: 60px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
-        .pg { display: none; width: 100%; max-width: 950px; flex-direction: column; align-items: center; animation: emerge 0.5s ease-out; }
-        .pg.active { display: flex; }
-
-        h1 { font-size: 5.5rem; margin: 0 0 45px 0; color: var(--p); text-shadow: 8px 8px 0 #fff; animation: glitch 5s infinite; text-transform: uppercase; }
-
-        .card { background: rgba(255,255,255,0.01); border: 1px solid #151515; padding: 35px; width: 100%; margin-bottom: 25px; border-radius: 12px; position: relative; transition: 0.4s; overflow: hidden; }
-        .card:hover { border-color: var(--ce); background: rgba(0,229,255,0.02); transform: translateY(-5px); }
-        .btn { position: absolute; right: 35px; top: 50%; transform: translateY(-50%); background: var(--p); color: #fff; border: none; padding: 15px 30px; border-radius: 6px; font-weight: bold; box-shadow: 0 0 15px var(--p); }
-
-        textarea, input { width: 100%; background: #030303; color: var(--s); border: 1px solid #111; padding: 25px; font-size: 1.1rem; border-radius: 6px; outline: none; margin-top: 25px; border-left: 6px solid var(--ce); }
-
-        /* MODAL LOCKDOWN */
-        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.99); z-index: 999999; justify-content: center; align-items: center; }
-        .sc { background: #000; border: 3px solid var(--ce); width: 550px; padding: 45px; border-radius: 15px; box-shadow: 0 0 80px rgba(0, 229, 255, 0.2); }
-
-        @keyframes glitch { 0%, 5% { transform: translate(0); } 2% { transform: translate(-5px,3px); text-shadow: 8px 8px 0 #fff,-5px 0 var(--p); } 4% { transform: translate(5px,-3px); text-shadow: 8px 8px 0 #fff,5px 0 var(--s); } }
-    </style>
-</head>
-<body>
-    <div id="crt"></div>
-    <div id="c" class="tr"></div><div class="tr" style="opacity:0.6; width:10px; height:10px;"></div><div class="tr" style="opacity:0.3; width:6px; height:6px;"></div>
-
-    <audio id="bgm" loop><source src="Let It Ride - Anno Domini Beats.mp3"></audio>
-    <button id="tog" onclick="togS()">«</button>
-
-    <div class="sd" id="side">
-        <div class="st">HONOURED<br><span>INVENTORY</span></div>
-        <div class="rk">RANK: HONOURED</div>
-        <button class="nb active" onclick="nav('h',this)">HOME</button>
-        <button class="nb" onclick="nav('a',this)">ARSENAL</button>
-        <button class="nb" onclick="nav('m',this)">MOVESETS</button>
-        <button class="nb" onclick="nav('an',this)">ANIMATIONS</button>
-        <button class="nb" onclick="nav('v',this)">THE VAULT</button>
-        <button class="nb" onclick="nav('co',this)">CONTACT</button>
-        <button class="nb" style="margin-top:auto; border-color:var(--ce); color:var(--ce);" onclick="togM()">SYSTEM OVERRIDE ⚙️</button>
-    </div>
-
-    <div class="mc">
-        <div id="h" class="pg active">
-            <h1>Home</h1>
-            <div style="width:100%; aspect-ratio:16/9; border:3px solid var(--p); border-radius:15px; overflow:hidden;">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/7E-KYBDySz8" frameborder="0" allowfullscreen></iframe>
-            </div>
-        </div>
-
-        <div id="a" class="pg">
-            <div id="a-l" style="width:100%">
-                <h1>Arsenal</h1>
-                <div class="card"><h2>Combat UI</h2><p>V4.5 Special Grade Interface String</p><button class="btn" onclick="op('H')">EXTRACT</button></div>
-                <div class="card"><h2>Global Inventory</h2><p>Full itemization restore protocol</p><button class="btn" onclick="op('A')">EXTRACT</button></div>
-                <div class="card"><h2>Divine: SSK</h2><p>Split Soul Katana - True Strike Data</p><button class="btn" onclick="op('SSK')">EXTRACT</button></div>
-                <div class="card"><h2>Divine: PC</h2><p>Playful Cloud - Kinetic Chain String</p><button class="btn" onclick="op('PC')">EXTRACT</button></div>
-            </div>
-            <div id="a-v" style="display:none; width:100%">
-                <button class="nb" style="width:140px; border-color:var(--p)" onclick="cl()">« CANCEL</button>
-                <textarea id="out" readonly style="min-height:450px"></textarea>
-                <button class="nb active" style="text-align:center; margin-top:20px" onclick="cp()">ACQUIRE STRING</button>
-            </div>
-        </div>
-
-        <div id="m" class="pg">
-            <h1>Movesets</h1>
-            <div class="card"><h2>Hollow Purple</h2><p>Special Grade [200%] String</p><button class="btn" onclick="op('HP')">VIEW</button></div>
-            <div class="card"><h2>Infinite Void</h2><p>Domain Expansion Logic [999ms]</p><button class="btn" onclick="op('DE')">VIEW</button></div>
-            <div class="card"><h2>Cleave/Dismantle</h2><p>Shrine Slicing Protocol</p><button class="btn" onclick="op('CD')">VIEW</button></div>
-        </div>
-
-        <div id="an" class="pg">
-            <h1>Animations</h1>
-            <div class="card"><h2>Idle Aura</h2><p>60FPS Pulsating Energy Loop</p><button class="btn" onclick="op('AN')">SYNC</button></div>
-            <div class="card"><h2>Black Flash</h2><p>Critical Impact Frame Data</p><button class="btn" onclick="op('BF')">SYNC</button></div>
-        </div>
-
-        <div id="v" class="pg">
-            <h1>The Vault</h1>
-            <textarea id="vi" placeholder="Input sacrifice..."></textarea>
-            <button id="vb" class="nb active" style="margin-top:25px; text-align:center" onclick="tx('xnjowojl','vi','vb')">SUBMIT DATA</button>
-        </div>
-
-        <div id="co" class="pg">
-            <h1>Contact</h1>
-            <input type="text" id="cs" placeholder="Subject Target">
-            <textarea id="cm" placeholder="Message Packet..."></textarea>
-            <button id="cb" class="nb active" style="margin-top:25px; text-align:center" onclick="tx('xdapbyva','cm','cb','cs')">TRANSMIT SIGNAL</button>
-        </div>
-    </div>
-
-    <div class="mo" id="mod">
-        <div class="sc">
-            <h2 style="color:var(--ce); margin:0; letter-spacing:4px">CORE OVERRIDE</h2>
-            <div style="margin-top:40px">
-                <div style="display:flex; justify-content:space-between; color:var(--s); font-size:0.85rem; margin-bottom:12px"><span>Aura Volume</span><span id="vv">0%</span></div>
-                <input type="range" min="0" max="100" value="0" oninput="sv(this.value)" style="width:100%">
-            </div>
-            <div style="margin: 30px 0">
-                <div style="display:flex; justify-content:space-between; color:var(--s); font-size:0.85rem; margin-bottom:12px"><span>Pulse Tempo</span><span id="pv">1.0x</span></div>
-                <input type="range" min="5" max="25" value="10" oninput="sp(this.value)" style="width:100%">
-            </div>
-            <button class="nb" id="ctb" onclick="tc()" style="width:100%; color:#fff; margin-bottom:20px">SCANLINES: DISABLED</button>
-            <button class="nb active" style="text-align:center" onclick="togM()">EXIT CONTROL ROOM</button>
-        </div>
-    </div>
-
-    <script>
-        /* LOGIC LOCKDOWN */
-        const b = document.getElementById('bgm'), s = document.getElementById('side'), m = document.getElementById('mod'), tr = document.querySelectorAll('.tr'), ct = document.getElementById('crt');
-        const r = { 
-            H: "health_ui_protocol_v4.5_sync_ENCODED", 
-            A: "inventory_restore_all_special_grade_AURA", 
-            SSK: "divine_ssk_soul_breaker_string_99",
-            PC: "divine_playful_cloud_kinetic_v2",
-            HP: "technique_hollow_purple_200_void", 
-            DE: "expansion_limitless_void_active_00", 
-            CD: "shrine_cleave_dismantle_slash_92",
-            AN: "aura_loop_sync",
-            BF: "black_flash_spark_impact_frame_7"
-        };
-        let ms = { x: 0, y: 0 };
-
-        function nav(id, el) { document.querySelectorAll('.pg').forEach(p=>p.classList.remove('active')); document.getElementById(id).classList.add('active'); document.querySelectorAll('.nb').forEach(n=>n.classList.remove('active')); el.classList.add('active'); cl(); }
-        function togS() { s.classList.toggle('hidden'); document.getElementById('tog').innerText = s.classList.contains('hidden') ? '»' : '«'; }
-        function togM() { m.style.display = (m.style.display=='flex')?'none':'flex'; }
-        function sv(v) { b.volume = v/100; document.getElementById('vv').innerText = v+"%"; if(v>0 && b.paused) b.play(); }
-        function sp(v) { b.playbackRate = v/10; document.getElementById('pv').innerText = (v/10).toFixed(1)+"x"; }
-        function tc() { const a = ct.style.display === 'block'; ct.style.display = a ? 'none' : 'block'; document.getElementById('ctb').innerText = `SCANLINES: ${a ? 'DISABLED' : 'ENABLED'}`; }
-        function op(t) { document.getElementById('a-l').style.display='none'; document.getElementById('a-v').style.display='block'; document.getElementById('out').value = r[t]; }
-        function cl() { document.getElementById('a-l').style.display='block'; document.getElementById('a-v').style.display='none'; }
-        function cp() { document.getElementById('out').select(); document.execCommand('copy'); alert("String Acquired."); }
-        async function tx(fid, iid, bid, sid=null) { const bt = document.getElementById(bid), i = document.getElementById(iid); if(!i.value.trim()) return; bt.innerText = "TRANSMITTING..."; try { await fetch(`https://formspree.io/f/${fid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: i.value, subject: sid?document.getElementById(sid).value:'' }) }); bt.innerText = "SIGNAL SENT"; i.value = ""; } catch(e) { bt.innerText = "LINK FAILURE"; } setTimeout(()=>bt.innerText = "SUBMIT DATA", 3000); }
-        
-        window.addEventListener('mousemove', e => { ms.x = e.clientX; ms.y = e.clientY; });
-        function f() { 
-            let x = ms.x, y = ms.y; 
-            tr.forEach((t, i) => { 
-                t.style.left = x + "px"; t.style.top = y + "px"; 
-                // Enhanced trail lag for cursed energy feel
-                x += ((tr[i+1]?.offsetLeft || x) - x) * 0.3; 
-                y += ((tr[i+1]?.offsetTop || y) - y) * 0.3; 
-            }); 
-            requestAnimationFrame(f); 
-        }
-        f();
-    </script>
-</body>
-</html>
+    /* ... rest of the code ... */
+</style>
