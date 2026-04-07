@@ -14,16 +14,16 @@
         
         body { background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; background: radial-gradient(circle at 10% 50%, var(--g) 0%, #000 100%); }
         
-        /* ADAPTIVE CURSOR */
+        /* CURSOR LAYER - Set to highest z-index */
         .tr { 
             width: 12px; height: 12px; background: var(--c-color); 
             position: fixed; border-radius: 50%; pointer-events: none; 
-            z-index: 10000; transform: translate(-50%, -50%); 
+            z-index: 100000; transform: translate(-50%, -50%); 
             left: -100px; top: -100px;
             box-shadow: 0 0 10px var(--c-color);
             transition: background 0.3s;
         }
-        #c { width: 14px; height: 14px; box-shadow: 0 0 20px var(--c-color); z-index: 10001; }
+        #c { width: 14px; height: 14px; box-shadow: 0 0 20px var(--c-color); z-index: 100001; }
         
         /* SIDEBAR */
         .sd { 
@@ -34,7 +34,6 @@
         }
         .sd.hidden { margin-left: -280px; }
 
-        /* TOGGLE BUTTON */
         #m-tog { 
             position: fixed; top: 20px; left: 245px; 
             background: var(--p); color: #fff; border: none; 
@@ -51,46 +50,39 @@
         .nb.active { border: 2px solid var(--s) !important; box-shadow: 0 0 20px var(--s); background: #001; }
         .set-btn { margin-top: auto; background: #111; border: 2px solid #fff; color: #fff; padding: 12px; text-align: center; width: 100%; transition: 0.2s; }
 
-        /* MAIN CONTENT - FIXED WIDTH */
+        /* MAIN CONTENT */
         .mc { 
             flex: 1; padding: 50px 60px; overflow-y: auto; 
-            display: flex; flex-direction: column; 
-            align-items: stretch; /* Stretches children to full width */
+            display: flex; flex-direction: column; align-items: stretch; 
             transition: 0.5s; 
         }
         .page { display: none; width: 100%; } 
-        .page.active { 
-            display: flex; flex-direction: column; 
-            align-items: center; /* Centers elements inside the wide page */
-            text-align: center;
-        }
+        .page.active { display: flex; flex-direction: column; align-items: center; text-align: center; }
 
         h1 { font-size: 4.5rem; margin: 0; color: var(--p); text-shadow: 4px 4px 0 #fff; }
         
-        /* CODE CARD */
+        /* VIDEO GHOST FIX */
+        .vb { 
+            width: 100%; max-width: 850px; aspect-ratio: 16/9; 
+            border: 6px solid var(--p); box-shadow: 0 0 50px var(--p); 
+            background: #000; margin-top: 20px; position: relative;
+        }
+        /* This invisible layer keeps the cursor alive */
+        .v-fix {
+            position: absolute; inset: 0; z-index: 10; background: transparent;
+        }
+        .v-fix.off { pointer-events: none; }
+
+        /* CODES */
         .code-card {
-            background: #050505;
-            border: 2px solid var(--p);
-            padding: 20px;
-            margin: 20px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 750px;
-            box-shadow: 0 0 15px var(--p);
+            background: #050505; border: 2px solid var(--p); padding: 20px; margin: 20px 0;
+            display: flex; justify-content: space-between; align-items: center;
+            width: 100%; max-width: 750px; box-shadow: 0 0 15px var(--p);
         }
         .code-info { text-align: left; }
         .code-name { color: var(--s); font-size: 1.2rem; display: block; text-transform: uppercase; }
         .code-desc { font-size: 0.9rem; color: #888; margin: 5px 0 0; }
         .copy-btn { width: auto !important; padding: 10px 20px !important; margin: 0 !important; font-size: 0.8rem; }
-
-        /* VIDEO CONTAINER */
-        .vb { 
-            width: 100%; max-width: 850px; aspect-ratio: 16/9; 
-            border: 6px solid var(--p); box-shadow: 0 0 50px var(--p); 
-            background: #000; margin-top: 20px;
-        }
 
         /* SETTINGS */
         .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 1000; justify-content: center; align-items: center; }
@@ -102,7 +94,8 @@
         .sw.on { background: #0056b3 !important; border-color: #0056b3; box-shadow: 0 0 10px #0056b3; } 
         .sw.on .kn { transform: translateX(32px); }
         
-        .sk { animation: sk .2s ease-in-out; } @keyframes sk { 0%,100%{transform:translateX(0)} 25%{transform:translateX(5px)} 75%{transform:translateX(-5px)} }
+        .sk { animation: sk .2s ease-in-out; } 
+        @keyframes sk { 0%,100%{transform:translateX(0)} 25%{transform:translateX(5px)} 75%{transform:translateX(-5px)} }
         @keyframes gl { 0%, 6% { transform: translate(0); } 2% { transform: translate(-2px,2px); text-shadow: 4px 4px 0 #fff,-2px 0 var(--p); } 4% { transform: translate(2px,-2px); text-shadow: 4px 4px 0 #fff,2px 0 var(--s); } }
     </style>
 </head>
@@ -112,7 +105,6 @@
     <div class="tr" style="opacity: 0.2;"></div><div class="tr" style="opacity: 0.1;"></div>
 
     <audio id="m" loop><source src="Let%20It%20Ride%20-%20Anno%20Domini%20Beats.mp3"></audio>
-
     <button id="m-tog" onclick="tgs()">«</button>
 
     <div class="sd" id="sidebar">
@@ -130,18 +122,18 @@
             <h1 class="glitch" style="animation: gl 3s infinite;">Home</h1>
             <div style="font-size: 1.4rem; line-height: 1.6; max-width: 800px; margin: 25px 0 40px;">
                 Welcome to THE HONOURED INVENTORY. Suit yourself with any animation or moveset or codes for movesets. <br><br>
-                Using my stuff for your own content requires credits and ONLY if it's for learning or personal use then credits is appreciated.
+                Using my stuff for your own content requires credits.
             </div>
-            <div class="vb"><iframe src="https://www.youtube.com/embed/DUqZNqbLF5g" style="width:100%;height:100%;border:none" allowfullscreen></iframe></div>
+            <div class="vb" onmouseleave="v_reset()">
+                <div class="v-fix" id="vf" onclick="v_click()"></div>
+                <iframe id="yt" src="https://www.youtube.com/embed/DUqZNqbLF5g" style="width:100%;height:100%;border:none" allowfullscreen></iframe>
+            </div>
         </div>
 
         <div id="codes" class="page">
             <h1>Codes</h1>
             <div class="code-card">
-                <div class="code-info">
-                    <span class="code-name">Health Indicator</span>
-                    <p class="code-desc">Visual health bar customizer string.</p>
-                </div>
+                <div class="code-info"><span class="code-name">Health Indicator</span><p class="code-desc">Visual health bar customizer string.</p></div>
                 <button class="nb copy-btn" onclick="cp(this, 'KLUv/WBUOb0gABboeSUQjegBClr8lbk7PcpLt94FqBQr3HhvDQ+UBe++nTjAogAAAOBUcgBuAHIAzD2+qUGlGsMuDvcgE2XjPLts5rs1tybJ9+Nbgu7MCt/MATy+dZWWpqb1bTl4fEMmEeubOQ4e3xCQPH1bHt8NCpNHReHb4o9PPSNn/3iDMpy5tZVBITCceYUi8VCILEzqepD8cSowrzPIREXi8SiabjkIkxQw9bKzouqAq3ppOysPyCRiqW1oSk9VzlTfui5elkJ3QpMK0VyjFXArNWml8MTaYu3iqqfGeWk79a2wwFwsxpexxdDSdtJc6QKqfbP2+G7oCs0J06hai6F1J+SbQSIkD4ZnCeC8WHSg6mlp9h0v35Pu/XsZY3zpwG8mSbYnX/zmxPec5jAyvm8wtsh8g83JZpKmahe+2UMLc1wYgIXKg5IgkUQUDoQ86JjWYhMb6L4993amA5lS6+J1qyyBKEwekIboYkElKo9JgkLJCxHK5OEwofOcViPCioz1hGb06wqOS3v8EuDIYgw588tF0pNGF1OqwvcxCOatNIUvg4BS1QOlMvlmjgeffIf5fxi/OUY2kGmgfEx851x0mAfhx+Y5B2Xz32ATHzIvNic6DqCR7x5k/r2E75p3nnmO814jnXMvMv+vcV5+A52A0qgxKhKRCUQUpClIYRgDYCIZGSG0bRJAEEGYwiiUoEEoAgZhGEYJjCGMEIEhAkMERAnGGRGzAxdmhVvPlimP6GWibwj96NKAfhOmVCc9tVmqbqs6QNRdhH2TaOXARuQTPUmdwvSDjy/Z4RfgDPfGxHxcMOgNnmfPYkjsLdibuixscXZKgUe+13LOT2yxKHU0grNZWaFZ8dOGDxpyDOiKdD4l62D59UiD0p7es1XWCWq3OfQCRxIFS+oA5igiH5NF+CTSHpxjsmcv+GyWObEHTvbsXKQ9U5gOyJKbCtdsQO0gGBt8cLyjDdW9Pxn43XxwrQeVzodA8jfNO3WGepNYv6cUNAFhhBhdf8jl0S1OcKgSexWELkw8PUxFaZ4q6d/U4jGgG44sTVZBMoYZy+lmRHrByq/LmcuPgKHBVT9u+XxjxoASPgsTAxoyKWIPtSGaJL9tm9KYK40DXY7Y5yHrZ789vdr2hhOuV/+OOpWiwcX5qCPNRe49wZf23Bh9f3Iv18/LcKXkdsgyNVoajxQ84qNyrFPdD1Yi8JHkc/XM0x4gM8zzecz/PRCXq+nN7QJSvmqKOW8Bn02KyZ7NcJ3E6BvyGXLk+vApGNy+QPLaR6JMHtK3dh4djsQRKB2xz+86BiO2O2F8H4KexEpKeht6nmSng1fu6njBhOQl8ENNyThVqHMuPhLrDyLP+ICPRQGTlyRJiIlLgiSHCfDlEJiQIKcCsLWx6hqp3rNSAw==')">COPY CODE</button>
             </div>
         </div>
@@ -167,7 +159,13 @@
         const trs = document.querySelectorAll('.tr'), b = document.getElementById('b'), mod = document.getElementById('sMod'), music = document.getElementById('m'), side = document.getElementById('sidebar');
         let pts = 0; let coords = { x: 0, y: 0 };
 
-        document.addEventListener('mousemove', e => { coords.x = e.clientX; coords.y = e.clientY; });
+        document.addEventListener('mousemove', e => { 
+            coords.x = e.clientX; coords.y = e.clientY; 
+        });
+
+        // VIDEO FIX FUNCTIONS
+        function v_click() { document.getElementById('vf').classList.add('off'); }
+        function v_reset() { document.getElementById('vf').classList.remove('off'); }
 
         function updateTrailPositions() {
             let x = coords.x; let y = coords.y;
