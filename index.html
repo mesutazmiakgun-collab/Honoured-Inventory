@@ -42,20 +42,6 @@
             text-transform: uppercase;
         }
 
-        /* Music Toggle Button */
-        #musicToggle {
-            background: #111;
-            border: 2px solid #FF0000;
-            color: #fff;
-            padding: 10px;
-            margin-bottom: 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            text-align: center;
-            transition: 0.3s;
-        }
-        #musicToggle:hover { background: #300; }
-
         .nav-btn { 
             background: #000; 
             border: 1px solid #444; 
@@ -77,76 +63,96 @@
 
         .nav-btn:hover:not(.active) { border-color: #FF0000; background: #100; }
 
-        /* Main Content */
-        .main-content { flex-grow: 1; padding: 60px; overflow-y: auto; position: relative; }
-        
-        h1 { font-size: 4.5rem; margin: 0 0 20px 0; color: #FF0000; text-shadow: 4px 4px 0px #fff; letter-spacing: -3px; }
-        
-        .video-label {
-            font-size: 1.8rem;
+        .settings-btn {
+            margin-top: auto;
+            background: #111;
+            border: 2px solid #fff;
             color: #fff;
-            margin-bottom: 15px;
-            display: inline-block;
-            border-bottom: 3px solid #FF0000;
+            padding: 15px;
+            cursor: pointer;
+            text-align: center;
         }
 
-        .welcome-text { font-size: 1.4rem; line-height: 1.5; max-width: 900px; color: #fff; margin-bottom: 40px; }
-
-        .video-container { 
-            max-width: 850px; 
-            aspect-ratio: 16/9; 
-            border: 6px solid #FF0000;
-            box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);
+        /* JJS Style Settings Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
         }
-        iframe { width: 100%; height: 100%; border: none; }
 
-        .page { display: none; }
-        .page.active { display: block; }
+        .settings-card {
+            background: rgba(15, 15, 15, 0.95);
+            border: 4px solid #FF0000;
+            width: 450px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+        }
 
-        /* Moveset Cards */
-        .code-card {
-            background: #0a0a0a;
-            border: 2px solid #333;
-            padding: 25px;
-            margin-bottom: 20px;
+        .settings-header {
+            font-size: 2rem;
+            color: #FF0000;
+            border-bottom: 2px solid #FF0000;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+
+        .setting-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 20px;
         }
-        .view-btn {
-            background: #FF0000;
-            color: white;
-            border: 3px solid #fff;
-            padding: 12px 25px;
+
+        /* JJS Toggle Switch */
+        .toggle-box {
+            background: #222;
+            border: 2px solid #444;
+            padding: 8px 20px;
+            cursor: pointer;
+            color: #fff;
+            transition: 0.2s;
+        }
+        .toggle-box.on { border-color: #5ab9ff; color: #5ab9ff; box-shadow: 0 0 10px #5ab9ff; }
+
+        input[type="range"] {
+            accent-color: #FF0000;
             cursor: pointer;
         }
 
-        /* Detail View */
-        .code-detail-page {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            display: none;
-            padding: 60px;
-            z-index: 20;
-        }
-        .copy-box {
-            background: #111;
-            padding: 40px;
-            border: 4px dashed #FF0000;
-            text-align: center;
-            margin-top: 40px;
-        }
-        .back-btn { color: #5ab9ff; cursor: pointer; text-decoration: underline; margin-bottom: 20px; display: inline-block; }
-        .guns-link {
-            display: inline-block;
-            padding: 20px 50px;
+        .help-btn {
+            width: 100%;
             background: #FF0000;
             color: #fff;
-            text-decoration: none;
-            font-size: 2rem;
-            border: 4px solid #fff;
+            border: 2px solid #fff;
+            padding: 10px;
+            margin-top: 20px;
+            cursor: pointer;
         }
+
+        .close-settings {
+            display: block;
+            margin: 20px auto 0;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .main-content { flex-grow: 1; padding: 60px; overflow-y: auto; position: relative; }
+        h1 { font-size: 4.5rem; margin: 0 0 20px 0; color: #FF0000; text-shadow: 4px 4px 0px #fff; letter-spacing: -3px; }
+        .status-msg { font-size: 1.5rem; color: #555; border: 2px dashed #333; padding: 40px; text-align: center; margin-top: 20px; }
+        .welcome-text { font-size: 1.4rem; line-height: 1.5; max-width: 900px; color: #fff; margin-bottom: 40px; }
+        .video-container { max-width: 850px; aspect-ratio: 16/9; border: 6px solid #FF0000; box-shadow: 0 0 50px rgba(255, 0, 0, 0.4); }
+        iframe { width: 100%; height: 100%; border: none; }
+        .page { display: none; }
+        .page.active { display: block; }
     </style>
 </head>
 <body>
@@ -158,13 +164,33 @@
     <div class="sidebar">
         <div class="sidebar-title">Honoured<br>Inventory</div>
         
-        <div id="musicToggle" onclick="toggleMusic()">MUSIC: OFF</div>
-
         <button class="nav-btn active" onclick="showPage('home', this)">Home</button>
         <button class="nav-btn" onclick="showPage('codes', this)">Codes</button>
         <button class="nav-btn" onclick="showPage('movesets', this)">Movesets</button>
         <button class="nav-btn" onclick="showPage('animations', this)">Animations</button>
         <button class="nav-btn" onclick="showPage('contact', this)">Contact</button>
+
+        <button class="settings-btn" onclick="toggleSettings()">SETTINGS ⚙️</button>
+    </div>
+
+    <div class="modal-overlay" id="settingsModal">
+        <div class="settings-card">
+            <div class="settings-header">SETTINGS</div>
+            
+            <div class="setting-row">
+                <span>Music Toggle</span>
+                <div class="toggle-box" id="musicToggle" onclick="toggleMusic()">OFF</div>
+            </div>
+
+            <div class="setting-row">
+                <span>Volume</span>
+                <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.4" oninput="updateVol()">
+            </div>
+
+            <button class="help-btn" onclick="showHelp()">HOW TO USE SITE</button>
+            
+            <button class="close-settings" onclick="toggleSettings()">BACK TO SITE</button>
+        </div>
     </div>
 
     <div class="main-content">
@@ -173,87 +199,70 @@
             <div class="welcome-text">
                 Welcome to THE HONOURED INVENTORY. Suit yourself with any animation or moveset or codes for movesets. 
                 <br><br>
-                Using my stuff for your own content requires credits and ONLY if it's for learning or personal use then credits is appreciated, which DOES NOT mean you can use it in ur vids—i mean like dont call it urs.
+                Using my stuff for your own content requires credits and ONLY if it's for learning or personal use then credits is appreciated.
             </div>
-            
-            <div class="video-label">my recent video</div>
             <div class="video-container">
                 <iframe src="https://www.youtube.com/embed/DUqZNqbLF5g" allowfullscreen></iframe>
             </div>
         </div>
 
         <div id="codes" class="page">
-            <h1>Moveset Codes</h1>
-            <div class="code-card">
-                <span style="font-size: 1.8rem;">Gojo V2 Moveset</span>
-                <button class="view-btn" onclick="openCode('Gojo V2', 'CODE-G-9910')">VIEW CODE</button>
-            </div>
+            <h1>Codes</h1>
+            <div class="status-msg">No codes yet.</div>
+        </div>
+
+        <div id="movesets" class="page">
+            <h1>Movesets</h1>
+            <div class="status-msg">Inventory currently empty.</div>
+        </div>
+
+        <div id="animations" class="page">
+            <h1>Animations</h1>
+            <div class="status-msg">No custom animations uploaded yet.</div>
         </div>
 
         <div id="contact" class="page">
             <h1>Contact</h1>
-            <a href="https://guns.lol/azmi" target="_blank" class="guns-link">guns.lol/azmi</a>
-        </div>
-
-        <div id="codeViewPage" class="code-detail-page">
-            <span class="back-btn" onclick="closeCode()">← Back to Codes</span>
-            <h1 id="selectedMovesetName">Moveset Name</h1>
-            <div class="copy-box">
-                <p>Click the code below to copy it:</p>
-                <h2 id="actualCodeText" style="font-size: 3rem; color: #5ab9ff; cursor: pointer;" onclick="copyFinalCode()">CODE_HERE</h2>
-                <p style="margin-top: 20px; color: #888;">(Paste this into the game menu)</p>
-            </div>
+            <a href="https://guns.lol/azmi" target="_blank" style="color:#FF0000; font-size: 2rem;">guns.lol/azmi</a>
         </div>
     </div>
 
     <script>
         const music = document.getElementById('bgMusic');
         const mBtn = document.getElementById('musicToggle');
-        
-        music.volume = 0.4;
+        const modal = document.getElementById('settingsModal');
+        const volSlider = document.getElementById('volSlider');
+
+        function toggleSettings() {
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        }
 
         function toggleMusic() {
             if (music.paused) {
-                // Play and update button
                 music.play().then(() => {
-                    mBtn.innerText = "MUSIC: ON";
-                    mBtn.style.borderColor = "#5ab9ff";
-                    mBtn.style.color = "#5ab9ff";
-                }).catch(e => {
-                    alert("Click again to play music.");
-                    console.log("Play failed:", e);
-                });
+                    mBtn.innerText = "ON";
+                    mBtn.classList.add('on');
+                }).catch(e => console.log("Play failed:", e));
             } else {
-                // Pause and update button
                 music.pause();
-                mBtn.innerText = "MUSIC: OFF";
-                mBtn.style.borderColor = "#FF0000";
-                mBtn.style.color = "#fff";
+                mBtn.innerText = "OFF";
+                mBtn.classList.remove('on');
             }
         }
 
+        function updateVol() {
+            music.volume = volSlider.value;
+        }
+
+        function showHelp() {
+            alert("1. Use the Sidebar to navigate between Codes, Movesets, and Animations.\n2. Click 'Settings' to adjust the music and volume.\n3. Content used from this site MUST be credited to AzmiYT.\n4. If a code is available, clicking 'View' will allow you to copy it instantly.");
+        }
+
         function showPage(pageId, btn) {
-            closeCode();
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             btn.classList.add('active');
-        }
-
-        function openCode(name, code) {
-            document.getElementById('selectedMovesetName').innerText = name;
-            document.getElementById('actualCodeText').innerText = code;
-            document.getElementById('codeViewPage').style.display = 'block';
-        }
-
-        function closeCode() {
-            document.getElementById('codeViewPage').style.display = 'none';
-        }
-
-        function copyFinalCode() {
-            const code = document.getElementById('actualCodeText').innerText;
-            navigator.clipboard.writeText(code);
-            alert("Moveset Code Copied: " + code);
         }
     </script>
 </body>
