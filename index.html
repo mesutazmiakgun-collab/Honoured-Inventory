@@ -3,176 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Honoured Inventory | Special Grade</title>
+    <title>Honoured Inventory | Aura Max</title>
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap" rel="stylesheet">
     <style>
         :root { 
             --p: #f00; --s: #5ab9ff; --g: #300; --w: #fff; 
-            --gold: #ffcc00; --c-color: #ffcc00; 
+            --c-color: #ffcc00; 
+            --side-bg: rgba(10, 10, 10, 0.85);
         }
         
-        * { 
-            font-family: 'Finger Paint', cursive !important; 
-            box-sizing: border-box; 
-            cursor: none; 
-            scrollbar-width: none; 
-        }
+        * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none; scrollbar-width: none; }
         *::-webkit-scrollbar { display: none !important; }
 
         body { 
             background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; 
+            transition: background 0.5s ease;
             background: radial-gradient(circle at 10% 50%, var(--g) 0%, #000 100%); 
         }
         
-        /* CURSOR TRAIL (THE YELLOW ENERGY) */
-        .tr { width: 12px; height: 12px; background: var(--c-color); position: fixed; border-radius: 50%; pointer-events: none; z-index: 100000; transform: translate(-50%, -50%); left: -100px; top: -100px; box-shadow: 0 0 10px var(--c-color); }
-        #c { width: 14px; height: 14px; box-shadow: 0 0 20px var(--c-color); z-index: 100001; }
+        /* CURSOR TRAIL */
+        .tr { width: 12px; height: 12px; background: var(--c-color); position: fixed; border-radius: 50%; pointer-events: none; z-index: 100000; transform: translate(-50%, -50%); left: -100px; top: -100px; box-shadow: 0 0 15px var(--c-color); }
+        #c { width: 16px; height: 16px; box-shadow: 0 0 25px var(--c-color); z-index: 100001; }
         
-        /* SIDEBAR */
-        .sd { width: 280px; min-width: 280px; background: rgba(5,5,5,.98); padding: 30px 20px; display: flex; flex-direction: column; border-right: 3px solid var(--p); z-index: 100; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .sd.hidden { margin-left: -280px; }
-        #m-tog { position: fixed; top: 20px; left: 245px; background: var(--p); color: #fff; border: none; width: 35px; height: 35px; border-radius: 0 5px 5px 0; z-index: 1001; box-shadow: 0 0 10px var(--p); transition: 0.5s; font-size: 1.2rem; }
-        .sd.hidden #m-tog { left: 0px; }
+        /* --- AURA SIDEBAR --- */
+        .sd { 
+            width: 300px; min-width: 300px; 
+            background: var(--side-bg); 
+            backdrop-filter: blur(15px);
+            padding: 40px 25px; 
+            display: flex; flex-direction: column; 
+            border-right: 1px solid rgba(255, 0, 0, 0.3);
+            z-index: 100; 
+            transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+            box-shadow: 10px 0 30px rgba(0,0,0,0.5), inset -2px 0 15px rgba(255,0,0,0.1);
+        }
+        .sd.hidden { margin-left: -300px; }
+
+        /* THE BREATHE EFFECT */
+        @keyframes aura-breathe {
+            0%, 100% { border-right-color: rgba(255, 0, 0, 0.2); box-shadow: 10px 0 30px rgba(0,0,0,0.5); }
+            50% { border-right-color: rgba(255, 0, 0, 0.6); box-shadow: 15px 0 40px rgba(255,0,0,0.1); }
+        }
+        .sd { animation: aura-breathe 4s infinite ease-in-out; }
+
+        #m-tog { 
+            position: fixed; top: 25px; left: 265px; 
+            background: var(--p); color: #fff; border: none; 
+            width: 45px; height: 45px; border-radius: 12px; 
+            z-index: 1001; box-shadow: 0 0 15px var(--p); 
+            transition: 0.5s; font-size: 1.5rem;
+        }
+        .sd.hidden #m-tog { left: 15px; border-radius: 50%; }
         
-        .st { font-size: 1.8rem; color: var(--p); text-transform: uppercase; text-shadow: 0 0 10px var(--p); line-height: 1; }
-        .rk { font-size: .8rem; color: var(--s); margin-bottom: 20px; letter-spacing: 2px; }
+        /* TITLE & RANK AURA */
+        .st { font-size: 2.2rem; color: #fff; text-transform: uppercase; line-height: 0.9; margin-bottom: 5px; }
+        .st span { color: var(--p); text-shadow: 0 0 15px var(--p); }
+
+        .rk { 
+            font-size: .75rem; color: var(--c-color); 
+            margin-bottom: 30px; letter-spacing: 4px; 
+            text-transform: uppercase; font-weight: bold;
+            text-shadow: 0 0 8px var(--c-color);
+            background: rgba(255, 204, 0, 0.1);
+            padding: 5px 10px; border-radius: 4px; display: inline-block;
+        }
         
-        .cat-title { font-size: 0.7rem; color: #666; text-transform: uppercase; letter-spacing: 3px; margin: 15px 0 10px 5px; border-bottom: 1px solid #222; padding-bottom: 5px; }
-        .nb { background: #000; border: 1px solid #444; color: #fff; padding: 12px; text-align: left; margin-bottom: 10px; width: 100%; transition: 0.2s; font-size: 0.9rem; }
-        .nb.active { border: 2px solid var(--s); box-shadow: 0 0 20px var(--s); background: #001; }
+        .cat-title { font-size: 0.6rem; color: #555; text-transform: uppercase; letter-spacing: 5px; margin: 25px 0 15px 5px; }
+
+        /* BUTTON AURA */
+        .nb { 
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            color: #ccc; padding: 15px; text-align: left; 
+            margin-bottom: 12px; width: 100%; transition: 0.4s; 
+            font-size: 0.85rem; border-radius: 8px;
+            position: relative; overflow: hidden;
+        }
+        .nb::before {
+            content: ''; position: absolute; left: -100%; top: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,0,0,0.1), transparent);
+            transition: 0.5s;
+        }
+        .nb:hover { 
+            color: #fff; background: rgba(255, 255, 255, 0.08); 
+            transform: translateX(10px); border-color: var(--p);
+        }
+        .nb:hover::before { left: 100%; }
+        .nb.active { 
+            border-color: var(--s); color: var(--s); 
+            box-shadow: 0 0 20px rgba(90, 185, 255, 0.2); 
+            background: rgba(90, 185, 255, 0.05); 
+        }
 
         /* CONTENT */
         .mc { flex: 1; padding: 50px 60px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
         .page { display: none; width: 100%; flex-direction: column; align-items: center; }
         .page.active { display: flex; }
 
-        h1 { font-size: 4.5rem; margin: 0; color: var(--p); text-shadow: 4px 4px 0 #fff; animation: gl 3s infinite; }
+        h1 { font-size: 5rem; margin: 0; color: var(--p); text-shadow: 5px 5px 0 #fff; animation: gl 3s infinite; }
 
-        /* ARSENAL & SUB-PAGE */
-        .u-card { background: #000; border: 2px solid var(--p); box-shadow: 0 0 15px var(--p); padding: 25px; width: 100%; max-width: 800px; margin-bottom: 20px; position: relative; text-align: left; }
-        .u-title { color: var(--s); text-transform: uppercase; font-size: 1.6rem; margin: 0; }
-        .u-btn { position: absolute; top: 25px; right: 25px; background: transparent; border: 1px solid #444; color: #fff; padding: 10px 20px; transition: 0.2s; }
-        .u-btn:hover { background: #fff; color: #000; }
+        /* FORMS & INPUTS */
+        textarea, input[type="text"] { 
+            width: 100%; background: rgba(255,255,255,0.02); color: var(--s); 
+            border: 1px solid rgba(255,255,255,0.1); padding: 18px; 
+            font-size: 1rem; border-radius: 12px; outline: none; margin-top: 15px; 
+            transition: 0.3s;
+        }
+        textarea:focus, input[type="text"]:focus { border-color: var(--p); background: rgba(255,0,0,0.02); }
+
+        /* MODAL SETTINGS */
+        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.98); z-index: 1000; justify-content: center; align-items: center; }
+        .sc { background: #050505; border: 2px solid var(--p); width: 480px; padding: 35px; box-shadow: 0 0 50px rgba(255,0,0,0.2); border-radius: 20px; }
         
-        textarea { width: 100%; background: #050505; color: var(--s); border: 2px solid #333; padding: 15px; font-size: 1rem; border-radius: 5px; outline: none; margin-top: 15px; resize: none; min-height: 250px; }
-        input[type="text"] { width: 100%; background: #050505; color: var(--s); border: 2px solid #333; padding: 15px; font-size: 1rem; border-radius: 5px; outline: none; margin-bottom: 10px; }
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: #222; border-radius: 5px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--p); border-radius: 50%; box-shadow: 0 0 10px var(--p); }
 
-        /* SETTINGS - PREMIER TOGGLES */
-        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.97); z-index: 1000; justify-content: center; align-items: center; }
-        .sc { background: #0a0a0a; border: 4px solid var(--p); width: 450px; padding: 30px; box-shadow: 0 0 30px var(--p); border-radius: 10px; }
-        .s-row { display: flex; justify-content: space-between; align-items: center; margin: 25px 0; border-bottom: 1px solid #222; padding-bottom: 15px; }
-        
-        .tgl-bg { width: 55px; height: 28px; background: #333; border-radius: 20px; position: relative; transition: 0.4s; }
-        .tgl-kn { width: 22px; height: 22px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: 0.4s; }
-        .tgl-bg.on { background: var(--p); box-shadow: 0 0 15px var(--p); }
-        .tgl-bg.on .tgl-kn { left: 30px; }
-
-        @keyframes gl { 0%, 6% { transform: translate(0); } 2% { transform: translate(-2px,2px); text-shadow: 4px 4px 0 #fff,-2px 0 var(--p); } 4% { transform: translate(2px,-2px); text-shadow: 4px 4px 0 #fff,2px 0 var(--s); } }
+        @keyframes gl { 0%, 6% { transform: translate(0); } 2% { transform: translate(-3px,3px); text-shadow: 5px 5px 0 #fff,-3px 0 var(--p); } 4% { transform: translate(3px,-3px); text-shadow: 5px 5px 0 #fff,3px 0 var(--s); } }
     </style>
 </head>
 <body>
     <div id="c" class="tr"></div>
     <div class="tr" style="opacity: 0.6;"></div><div class="tr" style="opacity: 0.3;"></div>
 
-    <audio id="bg-audio" loop><source src="Let It Ride - Anno Domini Beats.mp3"></audio>
-    <button id="m-tog" onclick="tgs()">«</button>
+    <audio id="bgm" loop><source src="Let It Ride - Anno Domini Beats.mp3"></audio>
+    <button id="m-tog" onclick="togSide()">«</button>
 
     <div class="sd" id="sidebar">
-        <div class="st">Honoured<br>Inventory</div>
-        <div class="rk">RANK: SPECIAL GRADE</div>
+        <div class="st">HONOURED<br><span>INVENTORY</span></div>
+        <div class="rk">RANK: HONOURED</div>
         
         <div class="cat-title">Navigation</div>
-        <button class="nb active" onclick="pg('home',this)">Home</button>
-        <button class="nb" onclick="pg('codes',this)">Codes</button>
-        <button class="nb" onclick="pg('movesets',this)">Movesets</button>
-        <button class="nb" onclick="pg('animations',this)">Animations</button>
-        <button class="nb" onclick="pg('suggest',this)">Suggestions</button>
-        <button class="nb" onclick="pg('contact',this)">Contact</button>
+        <button class="nb active" onclick="nav('home',this)">HOME</button>
+        <button class="nb" onclick="nav('codes',this)">ARSENAL</button>
+        <button class="nb" onclick="nav('movesets',this)">MOVESETS</button>
+        <button class="nb" onclick="nav('animations',this)">ANIMATIONS</button>
+        <button class="nb" onclick="nav('suggest',this)">THE VAULT</button>
+        <button class="nb" onclick="nav('contact',this)">CONTACT</button>
         
         <div class="cat-title" style="margin-top:auto;">System</div>
-        <button class="nb" style="border-color:var(--p); box-shadow: 0 0 10px rgba(255,0,0,0.3);" onclick="togSet()">SETTINGS ⚙️</button>
+        <button class="nb" style="border: 1px solid var(--p); color: var(--p);" onclick="togSet()">SETTINGS ⚙️</button>
     </div>
 
     <div class="mc">
         <div id="home" class="page active">
             <h1>Home</h1>
-            <div style="border: 2px solid #222; background: rgba(255,0,0,0.05); padding: 30px; max-width: 850px; margin-top: 30px; border-radius: 10px; text-align: center;">
-                <p style="font-size: 1.3rem;">Welcome to the <span style="color:var(--p)">Honoured Arsenal.</span></p>
-                <p style="color:#888; margin-top: 10px;">The definitive inventory for combat logic and high-tier strings. Credits required for all use.</p>
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,0,0,0.2); padding: 40px; max-width: 800px; margin-top: 40px; border-radius: 20px; text-align: center;">
+                <p style="font-size: 1.4rem; letter-spacing: 1px;">WELCOME TO THE <span style="color:var(--p)">HONOURED</span> ARSENAL.</p>
             </div>
-            <div style="width: 100%; max-width: 800px; aspect-ratio: 16/9; border: 3px solid var(--p); margin-top: 40px; box-shadow: 0 0 25px var(--p);">
+            <div style="width: 100%; max-width: 800px; aspect-ratio: 16/9; border: 1px solid var(--p); margin-top: 40px; box-shadow: 0 0 40px rgba(255,0,0,0.1); border-radius: 15px; overflow: hidden;">
                 <iframe width="100%" height="100%" src="https://www.youtube.com/embed/7E-KYBDySz8" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
 
         <div id="codes" class="page">
-            <div id="codes-hub" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            <div id="codes-list" style="width:100%; display:flex; flex-direction:column; align-items:center;">
                 <h1 style="margin-bottom:40px;">Arsenal</h1>
-                <div class="u-card">
-                    <button class="u-btn" onclick="openCode('HEALTH')">VIEW</button>
-                    <h2 class="u-title">Health Indicator</h2>
-                    <p style="color:#555">High-fidelity UI health customizer string.</p>
-                </div>
-                <div class="u-card">
-                    <button class="u-btn" onclick="openCode('ARSENAL')">VIEW</button>
-                    <h2 class="u-title">Full Arsenal</h2>
-                    <p style="color:#555">The complete library of weapon logic.</p>
+                <div style="width:100%; max-width:800px; background:rgba(255,255,255,0.02); border:1px solid #222; padding:30px; border-radius:15px; position:relative; margin-bottom:20px;">
+                    <button style="position:absolute; right:30px; top:35px; background:var(--p); color:#fff; border:none; padding:10px 25px; border-radius:8px;" onclick="openCode('HEALTH')">VIEW</button>
+                    <h2 style="margin:0; color:var(--s);">Health Indicator</h2>
+                    <p style="color:#666; margin-top:5px;">Standard UI combat string.</p>
                 </div>
             </div>
-            <div id="codes-sub" style="display:none; width:100%; max-width:800px;">
+            <div id="codes-view" style="display:none; width:100%; max-width:800px;">
                 <button class="nb" style="width:120px; margin-bottom:20px;" onclick="closeCode()">« BACK</button>
-                <div class="u-card" style="border-color:var(--s)">
-                    <h2 id="sub-title" class="u-title">LOADING...</h2>
-                    <textarea id="sub-output" readonly></textarea>
-                    <button class="nb active" style="margin-top:20px; text-align:center;" onclick="copyStr()">COPY STRING</button>
-                </div>
+                <textarea id="v-output" readonly style="min-height:350px; border-color:var(--s);"></textarea>
+                <button class="nb active" style="margin-top:20px; text-align:center;" onclick="copy()">COPY TO CLIPBOARD</button>
             </div>
         </div>
 
-        <div id="movesets" class="page"><h1>Movesets</h1><p style="margin-top:30px; color:#444;">Storage currently empty.</p></div>
-        <div id="animations" class="page"><h1>Animations</h1><p style="margin-top:30px; color:#444;">Sequence storage empty.</p></div>
-
         <div id="suggest" class="page">
-            <h1>Suggestions</h1>
-            <textarea id="s-msg" placeholder="Tell us what to add..."></textarea>
-            <button id="s-btn" class="nb active" style="margin-top:20px; text-align:center; max-width:400px;" onclick="send('xnjowojl', 's-msg', 's-btn')">SUBMIT TO VAULT</button>
+            <h1>The Vault</h1>
+            <div style="width:100%; max-width:650px;">
+                <textarea id="s-input" placeholder="Sacrifice a suggestion to the vault..."></textarea>
+                <button id="s-btn" class="nb active" style="margin-top:25px; text-align:center" onclick="sendForm('xnjowojl', 's-input', 's-btn')">SUBMIT SACRIFICE</button>
+            </div>
         </div>
 
         <div id="contact" class="page">
             <h1>Contact</h1>
-            <div style="width:100%; max-width:650px; margin-top:30px;">
-                <input type="text" id="c-subject" placeholder="Subject">
-                <textarea id="c-msg" placeholder="Your message..."></textarea>
-                <button id="c-btn" class="nb active" style="margin-top:20px; text-align:center" onclick="send('xdapbyva', 'c-msg', 'c-btn', 'c-subject')">SEND MESSAGE</button>
+            <div style="width:100%; max-width:650px;">
+                <input type="text" id="c-sub" placeholder="Subject of transmission">
+                <textarea id="c-msg" placeholder="Write your message..."></textarea>
+                <button id="c-btn" class="nb active" style="margin-top:25px; text-align:center" onclick="sendForm('xdapbyva', 'c-msg', 'c-btn', 'c-sub')">SEND SIGNAL</button>
             </div>
         </div>
+
+        <div id="movesets" class="page"><h1>Movesets</h1></div>
+        <div id="animations" class="page"><h1>Animations</h1></div>
     </div>
 
     <div class="mo" id="set-mo">
         <div class="sc">
-            <h2 style="color:var(--p); margin:0;">AURA SETTINGS</h2>
-            <div class="s-row">
-                <span>Ambient Music</span>
-                <div id="m-sw" class="tgl-bg" onclick="handleMusic()">
-                    <div id="m-kn" class="tgl-kn"></div>
+            <h2 style="color:var(--p); margin:0; letter-spacing:3px;">SYSTEM AURA</h2>
+            <div style="margin:30px 0;">
+                <div style="display:flex; justify-content:space-between; color:var(--s); font-size:0.9rem; margin-bottom:10px;">
+                    <span>Volume Control</span><span id="v-val">0%</span>
                 </div>
+                <input type="range" min="0" max="100" value="0" oninput="setVol(this.value)">
             </div>
-            <div class="s-row">
-                <span>Cursed Energy Trail</span>
-                <div class="tgl-bg on" onclick="this.classList.toggle('on')">
-                    <div class="tgl-kn"></div>
-                </div>
+            <div style="color:#555; font-size:0.7rem; text-transform:uppercase; letter-spacing:2px; margin-bottom:15px;">Aura Selection</div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <button class="th-btn" style="background:#100; border:1px solid #f00; color:#f00; padding:10px; border-radius:5px;" onclick="setAura('#f00', '#300')">HONOURED</button>
+                <button class="th-btn" style="background:#001; border:1px solid #5ab9ff; color:#5ab9ff; padding:10px; border-radius:5px;" onclick="setAura('#5ab9ff', '#001')">INFINITY</button>
             </div>
-            <button class="nb active" style="text-align:center; margin-top:10px;" onclick="togSet()">CLOSE</button>
+            <button class="nb active" style="text-align:center; margin-top:30px;" onclick="togSet()">CLOSE SYSTEM</button>
         </div>
     </div>
 
     <script>
-        const audio = document.getElementById('bg-audio'), side = document.getElementById('sidebar'), sMo = document.getElementById('set-mo'), trs = document.querySelectorAll('.tr');
-        const db = { HEALTH: "KLUv/WBuOB0gABBoESUJeg...", ARSENAL: "FULL_ARSENAL_DATA_RESTORED" };
+        const bgm = document.getElementById('bgm'), side = document.getElementById('sidebar'), sMo = document.getElementById('set-mo'), trs = document.querySelectorAll('.tr');
+        const repo = { HEALTH: "HEALTH_UI_DATA_STRING", ARSENAL: "FULL_ARSENAL_DATA" };
         let mouse = { x: 0, y: 0 };
 
-        function pg(id, b) { 
+        function nav(id, b) { 
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nb').forEach(n => n.classList.remove('active'));
@@ -180,44 +223,56 @@
             closeCode();
         }
 
-        function tgs() { side.classList.toggle('hidden'); document.getElementById('m-tog').innerText = side.classList.contains('hidden') ? '»' : '«'; }
+        function togSide() { 
+            side.classList.toggle('hidden'); 
+            document.getElementById('m-tog').innerText = side.classList.contains('hidden') ? '»' : '«'; 
+        }
+
         function togSet() { sMo.style.display = (sMo.style.display == 'flex') ? 'none' : 'flex'; }
 
-        function handleMusic() {
-            const sw = document.getElementById('m-sw');
-            if(audio.paused) { audio.play(); sw.classList.add('on'); } 
-            else { audio.pause(); sw.classList.remove('on'); }
+        function setVol(v) { 
+            bgm.volume = v / 100; document.getElementById('v-val').innerText = v + "%";
+            if(v > 0 && bgm.paused) bgm.play();
+            if(v == 0) bgm.pause();
+        }
+
+        function setAura(p, g) {
+            document.documentElement.style.setProperty('--p', p);
+            document.documentElement.style.setProperty('--g', g);
+            document.body.style.background = `radial-gradient(circle at 10% 50%, ${g} 0%, #000 100%)`;
+        }
+
+        async function sendForm(fid, iid, bid, sid = null) {
+            const b = document.getElementById(bid), i = document.getElementById(iid);
+            if (!i.value.trim()) return;
+            b.innerText = "TRANSMITTING...";
+            const d = { message: i.value };
+            if (sid) d.subject = document.getElementById(sid).value;
+            try {
+                await fetch(`https://formspree.io/f/${fid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
+                b.innerText = "RECEIVED";
+                i.value = "";
+            } catch (e) { b.innerText = "FAILED"; }
+            setTimeout(() => b.innerText = "SUBMIT", 3000);
         }
 
         function openCode(t) {
-            document.getElementById('codes-hub').style.display='none';
-            document.getElementById('codes-sub').style.display='block';
-            document.getElementById('sub-title').innerText = t + " STRING";
-            document.getElementById('sub-output').value = db[t];
+            document.getElementById('codes-list').style.display='none';
+            document.getElementById('codes-view').style.display='block';
+            document.getElementById('v-output').value = repo[t];
         }
         function closeCode() {
-            document.getElementById('codes-hub').style.display='flex';
-            document.getElementById('codes-sub').style.display='none';
+            document.getElementById('codes-list').style.display='flex';
+            document.getElementById('codes-view').style.display='none';
         }
-        function copyStr() { const o = document.getElementById('sub-output'); o.select(); document.execCommand('copy'); alert("String copied."); }
-
-        async function send(fid, tid, bid, sid=null) {
-            const btn = document.getElementById(bid); btn.innerText = "SENDING...";
-            const body = { message: document.getElementById(tid).value };
-            if(sid) body.subject = document.getElementById(sid).value;
-            try {
-                await fetch(`https://formspree.io/f/${fid}`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
-                btn.innerText = "SENT!";
-            } catch(e) { btn.innerText = "SENT!"; } // Formspree confirmation
-            setTimeout(() => { btn.innerText = "SUBMIT"; }, 3000);
-        }
+        function copy() { document.getElementById('v-output').select(); document.execCommand('copy'); alert("String Copied."); }
 
         window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
         function trail() {
             let x = mouse.x, y = mouse.y;
             trs.forEach((t, i) => {
                 t.style.left = x + "px"; t.style.top = y + "px";
-                x += ((trs[i+1]?.offsetLeft || x) - x) * 0.35; y += ((trs[i+1]?.offsetTop || y) - y) * 0.35;
+                x += ((trs[i+1]?.offsetLeft || x) - x) * 0.3; y += ((trs[i+1]?.offsetTop || y) - y) * 0.3;
             });
             requestAnimationFrame(trail);
         }
