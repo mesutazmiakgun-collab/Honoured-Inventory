@@ -3,88 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Honoured Inventory | Ascended Aura</title>
+    <title>Honoured Inventory | Full Arsenal</title>
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap" rel="stylesheet">
     <style>
         :root { 
             --p: #f00; --s: #5ab9ff; --g: #300; --w: #fff; 
             --c-color: #ffcc00; --sat: 100%;
-            --side-bg: rgba(10, 10, 10, 0.85);
+            --side-bg: rgba(10, 10, 10, 0.9);
         }
         
         * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none; scrollbar-width: none; }
-        
+        *::-webkit-scrollbar { display: none !important; }
+
         body { 
             background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; 
-            filter: saturate(var(--sat));
-            transition: background 0.5s, filter 0.3s;
+            filter: saturate(var(--sat)); transition: 0.5s;
             background: radial-gradient(circle at 10% 50%, var(--g) 0%, #000 100%); 
         }
 
-        /* SCANLINE EFFECT */
-        #crt-overlay {
-            position: fixed; inset: 0; pointer-events: none; z-index: 99999;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 3px 100%; display: none;
-        }
+        #crt-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 99999; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); background-size: 100% 3px, 3px 100%; display: none; }
 
         /* CURSOR TRAIL */
         .tr { width: 12px; height: 12px; background: var(--c-color); position: fixed; border-radius: 50%; pointer-events: none; z-index: 100000; transform: translate(-50%, -50%); left: -100px; top: -100px; box-shadow: 0 0 15px var(--c-color); transition: opacity 0.3s; }
         #c { width: 16px; height: 16px; box-shadow: 0 0 25px var(--c-color); z-index: 100001; }
         
         /* SIDEBAR */
-        .sd { 
-            width: 300px; min-width: 300px; background: var(--side-bg); backdrop-filter: blur(15px);
-            padding: 40px 25px; display: flex; flex-direction: column; 
-            border-right: 1px solid rgba(255, 0, 0, 0.3); z-index: 100; 
-            transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            animation: aura-breathe 4s infinite ease-in-out;
-        }
+        .sd { width: 300px; min-width: 300px; background: var(--side-bg); backdrop-filter: blur(15px); padding: 40px 25px; display: flex; flex-direction: column; border-right: 1px solid rgba(255, 0, 0, 0.3); z-index: 100; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
         .sd.hidden { margin-left: -300px; }
-
-        @keyframes aura-breathe {
-            0%, 100% { border-right-color: rgba(255, 0, 0, 0.2); }
-            50% { border-right-color: rgba(255, 0, 0, 0.6); }
-        }
-
-        #m-tog { 
-            position: fixed; top: 25px; left: 265px; background: var(--p); color: #fff; border: none; 
-            width: 45px; height: 45px; border-radius: 12px; z-index: 1001; box-shadow: 0 0 15px var(--p); transition: 0.5s;
-        }
+        #m-tog { position: fixed; top: 25px; left: 265px; background: var(--p); color: #fff; border: none; width: 45px; height: 45px; border-radius: 12px; z-index: 1001; box-shadow: 0 0 15px var(--p); transition: 0.5s; font-size: 1.2rem; }
         .sd.hidden #m-tog { left: 15px; border-radius: 50%; }
         
         .st { font-size: 2.2rem; color: #fff; text-transform: uppercase; line-height: 0.9; margin-bottom: 5px; }
         .st span { color: var(--p); text-shadow: 0 0 15px var(--p); }
         .rk { font-size: .75rem; color: var(--c-color); letter-spacing: 4px; text-shadow: 0 0 8px var(--c-color); background: rgba(255, 204, 0, 0.1); padding: 5px 10px; border-radius: 4px; display: inline-block; margin-bottom: 30px;}
 
-        .nb { 
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); 
-            color: #ccc; padding: 15px; text-align: left; margin-bottom: 12px; width: 100%; transition: 0.4s; 
-            font-size: 0.85rem; border-radius: 8px; position: relative; overflow: hidden;
-        }
-        .nb:hover { transform: translateX(10px); border-color: var(--p); color: #fff; background: rgba(255, 255, 255, 0.08); }
-        .nb.active { border-color: var(--s); color: var(--s); background: rgba(90, 185, 255, 0.05); }
+        .nb { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); color: #ccc; padding: 15px; text-align: left; margin-bottom: 10px; width: 100%; transition: 0.3s; font-size: 0.85rem; border-radius: 8px; }
+        .nb:hover { transform: translateX(8px); border-color: var(--p); color: #fff; background: rgba(255, 255, 255, 0.08); }
+        .nb.active { border-color: var(--s); color: var(--s); background: rgba(90, 185, 255, 0.05); box-shadow: 0 0 15px rgba(90, 185, 255, 0.1); }
 
-        /* MAIN CONTENT */
+        /* CONTENT */
         .mc { flex: 1; padding: 50px 60px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
-        .page { display: none; width: 100%; flex-direction: column; align-items: center; }
+        .page { display: none; width: 100%; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
         .page.active { display: flex; }
-        h1 { font-size: 5rem; margin: 0; color: var(--p); text-shadow: 5px 5px 0 #fff; animation: gl 3s infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* SETTINGS MODAL GRID */
+        h1 { font-size: 4.5rem; margin: 0 0 30px 0; color: var(--p); text-shadow: 4px 4px 0 #fff; animation: gl 3s infinite; text-align: center; }
+
+        /* ITEM CARDS */
+        .u-card { background: rgba(255,255,255,0.02); border: 1px solid #222; padding: 25px; width: 100%; max-width: 800px; margin-bottom: 15px; border-radius: 12px; position: relative; transition: 0.3s; }
+        .u-card:hover { border-color: var(--p); background: rgba(255,0,0,0.02); }
+        .u-card h2 { margin: 0; color: var(--s); font-size: 1.4rem; }
+        .u-card p { margin: 5px 0 0; color: #777; font-size: 0.9rem; }
+        .view-btn { position: absolute; right: 25px; top: 50%; transform: translateY(-50%); background: var(--p); color: #fff; border: none; padding: 10px 20px; border-radius: 5px; }
+
+        /* TEXT AREAS */
+        textarea, input[type="text"] { width: 100%; background: #080808; color: var(--s); border: 1px solid #222; padding: 20px; font-size: 1rem; border-radius: 10px; outline: none; margin-top: 15px; resize: none; }
+
+        /* SETTINGS */
         .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.98); z-index: 1000; justify-content: center; align-items: center; }
-        .sc { background: #050505; border: 2px solid var(--p); width: 550px; padding: 35px; box-shadow: 0 0 50px rgba(255,0,0,0.2); border-radius: 20px; max-height: 90vh; overflow-y: auto; }
-        
-        .s-group { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #222; }
-        .s-label { display: flex; justify-content: space-between; color: var(--s); font-size: 0.8rem; margin-bottom: 10px; text-transform: uppercase; }
-        
+        .sc { background: #050505; border: 2px solid var(--p); width: 500px; padding: 35px; border-radius: 20px; box-shadow: 0 0 50px rgba(255,0,0,0.1); }
+        .s-group { margin-bottom: 20px; border-bottom: 1px solid #111; padding-bottom: 15px; }
         input[type="range"] { -webkit-appearance: none; width: 100%; height: 4px; background: #222; border-radius: 5px; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--p); border-radius: 50%; box-shadow: 0 0 8px var(--p); }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--p); border-radius: 50%; }
 
-        .tog-btn { padding: 8px 15px; background: #111; border: 1px solid #333; color: #fff; border-radius: 5px; font-size: 0.7rem; transition: 0.3s; }
-        .tog-btn.on { border-color: var(--p); background: rgba(255,0,0,0.1); color: var(--p); }
-
-        @keyframes gl { 0%, 6% { transform: translate(0); } 2% { transform: translate(-3px,3px); text-shadow: 5px 5px 0 #fff,-3px 0 var(--p); } 4% { transform: translate(3px,-3px); text-shadow: 5px 5px 0 #fff,3px 0 var(--s); } }
+        @keyframes gl { 0%, 6% { transform: translate(0); } 2% { transform: translate(-2px,2px); text-shadow: 4px 4px 0 #fff,-2px 0 var(--p); } 4% { transform: translate(2px,-2px); text-shadow: 4px 4px 0 #fff,2px 0 var(--s); } }
     </style>
 </head>
 <body>
@@ -100,6 +82,8 @@
         <div class="rk">RANK: HONOURED</div>
         <button class="nb active" onclick="nav('home',this)">HOME</button>
         <button class="nb" onclick="nav('codes',this)">ARSENAL</button>
+        <button class="nb" onclick="nav('movesets',this)">MOVESETS</button>
+        <button class="nb" onclick="nav('animations',this)">ANIMATIONS</button>
         <button class="nb" onclick="nav('suggest',this)">THE VAULT</button>
         <button class="nb" onclick="nav('contact',this)">CONTACT</button>
         <button class="nb" style="margin-top:auto; border-color:var(--p); color:var(--p);" onclick="togSet()">SETTINGS ⚙️</button>
@@ -108,84 +92,110 @@
     <div class="mc">
         <div id="home" class="page active">
             <h1>Home</h1>
-            <div style="width: 100%; max-width: 800px; aspect-ratio: 16/9; border: 1px solid var(--p); margin-top: 40px; border-radius: 15px; overflow: hidden;">
+            <div style="width: 100%; max-width: 800px; aspect-ratio: 16/9; border: 1px solid var(--p); border-radius: 15px; overflow: hidden; box-shadow: 0 0 30px rgba(255,0,0,0.15);">
                 <iframe width="100%" height="100%" src="https://www.youtube.com/embed/7E-KYBDySz8" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
-        
-        <div id="codes" class="page"><h1>Arsenal</h1><p>Strings loading...</p></div>
-        <div id="suggest" class="page"><h1>The Vault</h1><textarea id="s-in" placeholder="Sacrifice text..."></textarea></div>
-        <div id="contact" class="page"><h1>Contact</h1><input type="text" placeholder="Subject"></div>
+
+        <div id="codes" class="page">
+            <div id="codes-list" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                <h1>Arsenal</h1>
+                <div class="u-card">
+                    <h2>Health Indicator</h2><p>Special Grade UI interface.</p>
+                    <button class="view-btn" onclick="openData('HEALTH')">VIEW</button>
+                </div>
+                <div class="u-card">
+                    <h2>Full Inventory</h2><p>Complete data set transmission.</p>
+                    <button class="view-btn" onclick="openData('ARSENAL')">VIEW</button>
+                </div>
+            </div>
+            <div id="data-view" style="display:none; width:100%; max-width:800px;">
+                <button class="nb" style="width:120px; margin-bottom:20px;" onclick="closeData()">« BACK</button>
+                <textarea id="v-output" readonly style="min-height:400px; border-color:var(--s);"></textarea>
+                <button class="nb active" style="margin-top:20px; text-align:center;" onclick="copy()">COPY TO CLIPBOARD</button>
+            </div>
+        </div>
+
+        <div id="movesets" class="page">
+            <h1>Movesets</h1>
+            <div class="u-card"><h2>Cursed Strike Combo</h2><p>Requires Grade 1 access.</p><button class="view-btn">LOCKED</button></div>
+            <div class="u-card"><h2>Domain Expansion</h2><p>Rank: Honoured Only.</p><button class="view-btn">LOCKED</button></div>
+        </div>
+
+        <div id="animations" class="page">
+            <h1>Animations</h1>
+            <div class="u-card"><h2>Idle Stance</h2><p>Pulsing aura v1.2</p><button class="view-btn">VIEW</button></div>
+        </div>
+
+        <div id="suggest" class="page">
+            <h1>The Vault</h1>
+            <div style="width:100%; max-width:650px;">
+                <textarea id="s-in" placeholder="Sacrifice a suggestion to the vault..."></textarea>
+                <button id="s-btn" class="nb active" style="margin-top:20px; text-align:center" onclick="send('xnjowojl', 's-in', 's-btn')">SUBMIT</button>
+            </div>
+        </div>
+
+        <div id="contact" class="page">
+            <h1>Contact</h1>
+            <div style="width:100%; max-width:650px;">
+                <input type="text" id="c-sub" placeholder="Subject">
+                <textarea id="c-msg" placeholder="Message..."></textarea>
+                <button id="c-btn" class="nb active" style="margin-top:20px; text-align:center" onclick="send('xdapbyva', 'c-msg', 'c-btn', 'c-sub')">SEND MESSAGE</button>
+            </div>
+        </div>
     </div>
 
     <div class="mo" id="set-mo">
         <div class="sc">
-            <h2 style="color:var(--p); margin:0; letter-spacing:3px;">SYSTEM OVERRIDE</h2>
-            
-            <div class="s-group" style="margin-top:25px;">
-                <div class="s-label"><span>Ambient Audio</span><span id="v-val">0%</span></div>
+            <h2 style="color:var(--p); margin:0;">SYSTEM OVERRIDE</h2>
+            <div class="s-group" style="margin-top:20px;">
+                <div style="display:flex; justify-content:space-between; color:var(--s); font-size:0.8rem; margin-bottom:10px;"><span>Volume</span><span id="v-val">0%</span></div>
                 <input type="range" min="0" max="100" value="0" oninput="setVol(this.value)">
-                <div class="s-label" style="margin-top:10px;"><span>Playback Tempo</span><span id="p-val">1.0x</span></div>
-                <input type="range" min="5" max="20" value="10" oninput="setPitch(this.value)">
             </div>
-
             <div class="s-group">
-                <div class="s-label"><span>Aura Saturation</span><span id="sat-val">100%</span></div>
-                <input type="range" min="0" max="200" value="100" oninput="setSat(this.value)">
+                <div style="display:flex; justify-content:space-between; color:var(--s); font-size:0.8rem; margin-bottom:10px;"><span>Visuals</span></div>
+                <button class="tog-btn" id="c-tog" onclick="togCRT()" style="padding:10px; background:#111; border:1px solid #333; color:#fff; border-radius:5px; width:100%;">CRT SCANLINES: OFF</button>
             </div>
-
-            <div class="s-group">
-                <div class="s-label"><span>Visual Toggles</span></div>
-                <div style="display:flex; gap:10px;">
-                    <button id="crt-btn" class="tog-btn" onclick="togCRT()">CRT SCANLINES: OFF</button>
-                    <button id="trail-btn" class="tog-btn on" onclick="togTrail()">CURSOR TRAIL: ON</button>
-                </div>
-            </div>
-
-            <div class="s-group">
-                <div class="s-label"><span>Primary Aura Color</span></div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <button class="nb" style="margin:0; border-color:#f00; color:#f00;" onclick="setAura('#f00', '#300')">RED</button>
-                    <button class="nb" style="margin:0; border-color:#5ab9ff; color:#5ab9ff;" onclick="setAura('#5ab9ff', '#001')">BLUE</button>
-                </div>
-            </div>
-
-            <button class="nb active" style="text-align:center;" onclick="togSet()">SAVE & CLOSE</button>
+            <button class="nb active" style="text-align:center; margin-top:20px;" onclick="togSet()">CLOSE</button>
         </div>
     </div>
 
     <script>
         const bgm = document.getElementById('bgm'), side = document.getElementById('sidebar'), sMo = document.getElementById('set-mo'), trs = document.querySelectorAll('.tr'), crt = document.getElementById('crt-overlay');
-        let mouse = { x: 0, y: 0 }, trailActive = true;
+        const repo = { HEALTH: "HEALTH_UI_V3_STRING", ARSENAL: "FULL_INVENTORY_RESTORED_STRING" };
+        let mouse = { x: 0, y: 0 };
 
         function nav(id, b) { 
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nb').forEach(n => n.classList.remove('active'));
             if(b) b.classList.add('active');
+            closeData();
         }
 
         function togSide() { side.classList.toggle('hidden'); document.getElementById('m-tog').innerText = side.classList.contains('hidden') ? '»' : '«'; }
         function togSet() { sMo.style.display = (sMo.style.display == 'flex') ? 'none' : 'flex'; }
-
-        /* SETTINGS LOGIC */
         function setVol(v) { bgm.volume = v/100; document.getElementById('v-val').innerText = v+"%"; if(v>0 && bgm.paused) bgm.play(); }
-        function setPitch(v) { bgm.playbackRate = v/10; document.getElementById('p-val').innerText = (v/10).toFixed(1)+"x"; }
-        function setSat(v) { document.documentElement.style.setProperty('--sat', v+'%'); document.getElementById('sat-val').innerText = v+"%"; }
-        function setAura(p, g) { document.documentElement.style.setProperty('--p', p); document.body.style.background = `radial-gradient(circle at 10% 50%, ${g} 0%, #000 100%)`; }
-        
-        function togCRT() { 
-            const active = crt.style.display === 'block';
-            crt.style.display = active ? 'none' : 'block';
-            document.getElementById('crt-btn').innerText = `CRT SCANLINES: ${active ? 'OFF' : 'ON'}`;
-            document.getElementById('crt-btn').classList.toggle('on');
-        }
+        function togCRT() { const act = crt.style.display === 'block'; crt.style.display = act ? 'none' : 'block'; document.getElementById('c-tog').innerText = `CRT SCANLINES: ${act ? 'OFF' : 'ON'}`; }
 
-        function togTrail() {
-            trailActive = !trailActive;
-            trs.forEach(t => t.style.opacity = trailActive ? '1' : '0');
-            document.getElementById('trail-btn').innerText = `CURSOR TRAIL: ${trailActive ? 'ON' : 'OFF'}`;
-            document.getElementById('trail-btn').classList.toggle('on');
+        function openData(t) {
+            document.getElementById('codes-list').style.display='none';
+            document.getElementById('data-view').style.display='block';
+            document.getElementById('v-output').value = repo[t];
+        }
+        function closeData() {
+            document.getElementById('codes-list').style.display='flex';
+            document.getElementById('data-view').style.display='none';
+        }
+        function copy() { document.getElementById('v-output').select(); document.execCommand('copy'); alert("Copied."); }
+
+        async function send(fid, iid, bid, sid = null) {
+            const b = document.getElementById(bid), i = document.getElementById(iid);
+            if(!i.value.trim()) return;
+            b.innerText = "TRANSMITTING...";
+            const d = { message: i.value }; if(sid) d.subject = document.getElementById(sid).value;
+            try { await fetch(`https://formspree.io/f/${fid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) }); b.innerText = "SENT"; i.value = ""; } catch (e) { b.innerText = "ERROR"; }
+            setTimeout(() => b.innerText = "SUBMIT", 3000);
         }
 
         window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
