@@ -10,12 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap" rel="stylesheet">
 
     <style>
-        * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none; } /* Custom Cursor Required */
+        /* CURSOR HIDE & BASE */
+        * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none; }
 
         body { 
             background-color: #000; 
             color: #fff; 
             margin: 0; 
+            padding: 0;
             display: flex; 
             height: 100vh; 
             width: 100vw;
@@ -23,11 +25,11 @@
             background: radial-gradient(circle at 10% 50%, #300 0%, #000 100%);
         }
 
-        /* --- AURA: CURSOR TRAIL --- */
-        #cursor-dot { width: 8px; height: 8px; background: #FF0000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; box-shadow: 0 0 15px #FF0000; }
-        .trail { position: fixed; width: 4px; height: 4px; background: rgba(255,0,0,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.2s, opacity 0.2s; }
+        /* AURA: CURSOR & TRAIL */
+        #cursor-dot { width: 8px; height: 8px; background: #FF0000; position: fixed; border-radius: 50%; pointer-events: none; z-index: 9999; box-shadow: 0 0 15px #FF0000; transform: translate(-50%, -50%); }
+        .trail { position: fixed; width: 4px; height: 4px; background: rgba(255,0,0,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transition: opacity 0.3s; transform: translate(-50%, -50%); }
 
-        /* Sidebar */
+        /* SIDEBAR */
         .sidebar { 
             width: 280px; 
             min-width: 280px;
@@ -37,18 +39,17 @@
             flex-direction: column; 
             border-right: 3px solid #FF0000;
             z-index: 100;
-            position: relative;
+            height: 100vh;
         }
 
         .sidebar-title { 
             font-size: 1.8rem; 
-            margin-bottom: 5px; 
             color: #FF0000; 
             text-transform: uppercase;
             text-shadow: 0 0 10px rgba(255,0,0,0.8);
+            margin-bottom: 5px;
         }
 
-        /* AURA: RANK SYSTEM */
         .aura-rank {
             font-size: 0.8rem;
             color: #5ab9ff;
@@ -63,19 +64,17 @@
             color: #fff; 
             padding: 15px; 
             text-align: left; 
-            cursor: none; 
             margin-bottom: 12px;
             font-size: 1.1rem;
             width: 100%;
             transition: 0.2s;
         }
 
-        .nav-btn:active { transform: scale(0.95); filter: brightness(1.5); }
-
         .nav-btn.active { 
             border: 2px solid #5ab9ff !important; 
             box-shadow: 0 0 20px rgba(90, 185, 255, 0.4);
             background: #001;
+            transform: translateX(5px);
         }
 
         .settings-btn {
@@ -87,21 +86,31 @@
             text-align: center;
         }
 
-        /* Main Content */
-        .main-content { flex: 1; padding: 50px 60px; overflow-y: auto; height: 100vh; position: relative; }
-        h1 { font-size: 4.5rem; margin: 0; color: #FF0000; text-shadow: 4px 4px 0px #fff; animation: glitch 3s infinite; }
-
+        /* MAIN CONTENT AREA */
+        .main-content { 
+            flex: 1; 
+            padding: 50px 60px; 
+            overflow-y: auto; 
+            height: 100vh; 
+            position: relative; 
+        }
+        
+        h1 { font-size: 4.5rem; margin: 0; color: #FF0000; text-shadow: 4px 4px 0px #fff; animation: glitch 4s infinite; }
+        
         @keyframes glitch {
-            0% { transform: translate(0); }
-            2% { transform: translate(-2px, 2px); }
-            4% { transform: translate(2px, -2px); }
-            6% { transform: translate(0); }
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); color: #fff; }
+            94% { transform: translate(2px, -2px); color: #5ab9ff; }
+            96% { transform: translate(-1px, 1px); }
         }
 
         .content-block { margin-top: 25px; margin-bottom: 40px; }
         .welcome-text { font-size: 1.4rem; line-height: 1.6; max-width: 900px; color: #fff; }
-        .page { display: none; }
-        .page.active { display: block; }
+
+        .page { display: none; width: 100%; }
+        .page.active { display: block; animation: fadeIn 0.4s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .video-box {
             max-width: 850px; 
@@ -111,29 +120,27 @@
             background: #000;
         }
 
-        /* Screen Shake Aura */
+        /* SHAKE EFFECT */
         .shake { animation: shake 0.2s ease-in-out; }
         @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(5px); }
-            50% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-            100% { transform: translateX(0); }
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(4px); }
+            75% { transform: translateX(-4px); }
         }
 
-        /* Settings Modal */
+        /* MODAL */
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.95); z-index: 1000; justify-content: center; align-items: center;
         }
-
-        .settings-card { background: #0a0a0a; border: 4px solid #FF0000; width: 450px; padding: 40px; }
-
-        /* Sliding Toggle */
+        .settings-card { background: #0a0a0a; border: 4px solid #FF0000; width: 450px; padding: 40px; box-shadow: 0 0 30px #f00; }
+        
         .switch-track { width: 70px; height: 32px; background: #222; border-radius: 50px; position: relative; border: 2px solid #444; }
-        .switch-knob { width: 24px; height: 24px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: 0.3s; }
-        .switch-track.on { background: #5ab9ff; border-color: #fff; }
+        .switch-knob { width: 24px; height: 24px; background: #fff; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+        .switch-track.on { background: #5ab9ff; border-color: #fff; box-shadow: 0 0 10px #5ab9ff; }
         .switch-track.on .switch-knob { transform: translateX(38px); }
+
+        input[type="range"] { width: 100%; accent-color: #FF0000; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -153,6 +160,7 @@
         <button class="nav-btn" onclick="showPage('movesets', this)">Movesets</button>
         <button class="nav-btn" onclick="showPage('animations', this)">Animations</button>
         <button class="nav-btn" onclick="showPage('contact', this)">Contact</button>
+        
         <button class="settings-btn" onclick="toggleSettings()">SETTINGS ⚙️</button>
     </div>
 
@@ -163,7 +171,7 @@
                 <div class="welcome-text">
                     Welcome to THE HONOURED INVENTORY. Suit yourself with any animation or moveset or codes for movesets. 
                     <br><br>
-                    Using my stuff for your own content requires credits. Don't call it yours.
+                    Using my stuff for your own content requires credits and ONLY if it's for learning or personal use then credits is appreciated, which DOES NOT mean you can use it in ur vids—i mean like dont call it urs.
                 </div>
             </div>
             <div class="video-box">
@@ -171,28 +179,32 @@
             </div>
         </div>
 
-        <div id="codes" class="page"><h1>Codes</h1><div style="padding:40px; border:1px dashed #333; text-align:center;">No codes yet.</div></div>
-        <div id="movesets" class="page"><h1>Movesets</h1><div style="padding:40px; border:1px dashed #333; text-align:center;">Inventory empty.</div></div>
-        <div id="animations" class="page"><h1>Animations</h1><div style="padding:40px; border:1px dashed #333; text-align:center;">No animations yet.</div></div>
-        <div id="contact" class="page"><h1>Contact</h1><a href="https://guns.lol/azmi" target="_blank" style="color:#FF0000; font-size: 2rem;">guns.lol/azmi</a></div>
+        <div id="codes" class="page"><h1>Codes</h1><div style="padding:40px; border:1px dashed #333; text-align:center; color:#555;">No codes yet.</div></div>
+        <div id="movesets" class="page"><h1>Movesets</h1><div style="padding:40px; border:1px dashed #333; text-align:center; color:#555;">Inventory currently empty.</div></div>
+        <div id="animations" class="page"><h1>Animations</h1><div style="padding:40px; border:1px dashed #333; text-align:center; color:#555;">No custom animations uploaded yet.</div></div>
+        <div id="contact" class="page"><h1>Contact</h1><a href="https://guns.lol/azmi" target="_blank" style="color:#FF0000; font-size: 2rem; border-bottom: 2px solid #fff; text-decoration: none;">guns.lol/azmi</a></div>
     </div>
 
     <div class="modal-overlay" id="settingsModal">
         <div class="settings-card">
-            <h2 style="color: #FF0000;">SETTINGS</h2>
-            <div style="display:flex; justify-content:space-between; margin-bottom:30px;">
+            <h2 style="color: #FF0000; border-bottom: 1px solid #333; padding-bottom: 10px;">SETTINGS</h2>
+            <div style="display:flex; justify-content:space-between; margin: 25px 0; align-items: center;">
                 <span>Music Toggle</span>
                 <div class="switch-track" id="musicToggle" onclick="toggleMusic()">
                     <div class="switch-knob"></div>
                 </div>
             </div>
-            <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.4" style="width:100%" oninput="updateVol()">
-            <button class="settings-btn" style="width:100%; margin-top:20px;" onclick="toggleSettings()">CLOSE</button>
+            <div style="margin-bottom: 20px;">
+                <span>Volume Control</span>
+                <input type="range" id="volSlider" min="0" max="1" step="0.05" value="0.4" oninput="updateVol()">
+            </div>
+            <button class="settings-btn" style="width:100%; margin-bottom: 10px;" onclick="alert('Credits to AzmiYT required for public use.')">HOW TO USE</button>
+            <button class="settings-btn" style="width:100%; background:none; border-color:#444;" onclick="toggleSettings()">CLOSE</button>
         </div>
     </div>
 
     <script>
-        // --- CURSOR TRAIL ---
+        // CURSOR TRAIL LOGIC
         const dot = document.getElementById('cursor-dot');
         document.addEventListener('mousemove', (e) => {
             dot.style.left = e.clientX + 'px';
@@ -206,20 +218,20 @@
             
             setTimeout(() => {
                 trail.style.opacity = '0';
-                setTimeout(() => trail.remove(), 200);
-            }, 100);
+                setTimeout(() => trail.remove(), 300);
+            }, 50);
         });
 
-        // --- RANK SYSTEM ---
+        // RANK SYSTEM
         let auraPoints = 0;
         const ranks = ["UNRANKED", "GRADE 4", "GRADE 2", "GRADE 1", "SPECIAL GRADE", "THE HONOURED ONE"];
         setInterval(() => {
             auraPoints++;
-            let rankIndex = Math.min(Math.floor(auraPoints / 10), ranks.length - 1);
+            let rankIndex = Math.min(Math.floor(auraPoints / 15), ranks.length - 1);
             document.getElementById('rankDisplay').innerText = "RANK: " + ranks[rankIndex];
         }, 1000);
 
-        // --- CORE FUNCTIONS ---
+        // SYSTEM LOGIC
         const music = document.getElementById('bgMusic');
         const mToggle = document.getElementById('musicToggle');
         const modal = document.getElementById('settingsModal');
@@ -228,9 +240,10 @@
         
         function toggleMusic() {
             if (music.paused) {
-                music.play().then(() => mToggle.classList.add('on')).catch(() => alert("Click page first!"));
+                music.play().then(() => mToggle.classList.add('on')).catch(() => alert("Interact with the site first!"));
             } else {
-                music.pause(); mToggle.classList.remove('on');
+                music.pause();
+                mToggle.classList.remove('on');
             }
         }
 
