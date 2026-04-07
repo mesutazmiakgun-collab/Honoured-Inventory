@@ -61,16 +61,24 @@
         .page.active { display: flex; flex-direction: column; align-items: center; }
 
         h1 { font-size: 4.5rem; margin: 0; color: var(--p); text-shadow: 4px 4px 0 #fff; }
-        .glitch { animation: gl 3s infinite; }
-        @keyframes gl { 0%, 6% { transform: translate(0); } 2% { transform: translate(-2px,2px); text-shadow: 4px 4px 0 #fff,-2px 0 var(--p); } 4% { transform: translate(2px,-2px); text-shadow: 4px 4px 0 #fff,2px 0 var(--s); } }
         
-        .welcome-text { font-size: 1.4rem; line-height: 1.6; max-width: 800px; margin: 25px 0 40px; }
-        .vb { width: 100%; max-width: 850px; aspect-ratio: 16/9; border: 6px solid var(--p); box-shadow: 0 0 50px var(--p); background: #000; }
-
-        .cl { color: #f00; font-size: 3rem; text-decoration: none; display: inline-block; margin-top: 20px; position: relative; }
-        .cl:hover { color: #5ab9ff; transform: scale(1.05); text-shadow: 0 0 20px #5ab9ff; }
-        .cl::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 5px; background: #fff; animation: pulse 1.5s infinite alternate; }
-        @keyframes pulse { 0% { box-shadow: 0 0 5px #fff; opacity: 0.6; } 100% { box-shadow: 0 0 25px #fff, 0 0 45px #fff; opacity: 1; } }
+        /* CODE CARD STYLING */
+        .code-card {
+            background: #050505;
+            border: 2px solid var(--p);
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 0 15px var(--p);
+        }
+        .code-info { text-align: left; }
+        .code-name { color: var(--s); font-size: 1.2rem; display: block; text-transform: uppercase; }
+        .code-desc { font-size: 0.9rem; color: #888; margin: 5px 0 0; }
+        .copy-btn { width: auto !important; padding: 10px 20px !important; margin: 0 !important; font-size: 0.8rem; }
 
         /* SETTINGS */
         .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 1000; justify-content: center; align-items: center; }
@@ -78,9 +86,8 @@
         .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .th { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; }
         
-        /* SWITCH LOGIC - Forced Visibility Fix */
         .sw { width: 60px; height: 28px; background: #222; border-radius: 50px; position: relative; border: 1px solid #444; }
-        .kn { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: .3s; z-index: 2; }
+        .kn { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: .3s; }
         .sw.on { background: #0056b3 !important; border-color: #0056b3; box-shadow: 0 0 10px #0056b3; } 
         .sw.on .kn { transform: translateX(32px); }
         
@@ -108,17 +115,28 @@
 
     <div class="mc" id="b">
         <div id="home" class="page active">
-            <h1 id="ht" class="glitch">Home</h1>
+            <h1 class="glitch" style="animation: gl 3s infinite;">Home</h1>
             <div class="welcome-text">
                 Welcome to THE HONOURED INVENTORY. Suit yourself with any animation or moveset or codes for movesets. <br><br>
-                Using my stuff for your own content requires credits and ONLY if it's for learning or personal use then credits is appreciated, which DOES NOT mean you can use it in ur vids—i mean like dont call it urs.
+                Using my stuff for your own content requires credits and ONLY if it's for learning or personal use then credits is appreciated.
             </div>
             <div class="vb"><iframe src="https://www.youtube.com/embed/DUqZNqbLF5g" style="width:100%;height:100%;border:none" allowfullscreen></iframe></div>
         </div>
-        <div id="codes" class="page"><h1>Codes</h1><p>No codes yet.</p></div>
+
+        <div id="codes" class="page">
+            <h1>Codes</h1>
+            <div class="code-card">
+                <div class="code-info">
+                    <span class="code-name">Health Indicator</span>
+                    <p class="code-desc">Visual health bar customizer string.</p>
+                </div>
+                <button class="nb copy-btn" onclick="cp(this, 'KLUv/WBUOb0gABboeSUQjegBClr8lbk7PcpLt94FqBQr3HhvDQ+UBe++nTjAogAAAOBUcgBuAHIAzD2+qUGlGsMuDvcgE2XjPLts5rs1tybJ9+Nbgu7MCt/MATy+dZWWpqb1bTl4fEMmEeubOQ4e3xCQPH1bHt8NCpNHReHb4o9PPSNn/3iDMpy5tZVBITCceYUi8VCILEzqepD8cSowrzPIREXi8SiabjkIkxQw9bKzouqAq3ppOysPyCRiqW1oSk9VzlTfui5elkJ3QpMK0VyjFXArNWml8MTaYu3iqqfGeWk79a2wwFwsxpexxdDSdtJc6QKqfbP2+G7oCs0J06hai6F1J+SbQSIkD4ZnCeC8WHSg6mlp9h0v35Pu/XsZY3zpwG8mSbYnX/zmxPec5jAyvm8wtsh8g83JZpKmahe+2UMLc1wYgIXKg5IgkUQUDoQ86JjWYhMb6L4993amA5lS6+J1qyyBKEwekIboYkElKo9JgkLJCxHK5OEwofOcViPCioz1hGb06wqOS3v8EuDIYgw588tF0pNGF1OqwvcxCOatNIUvg4BS1QOlMvlmjgeffIf5fxi/OUY2kGmgfEx851x0mAfhx+Y5B2Xz32ATHzIvNic6DqCR7x5k/r2E75p3nnmO814jnXMvMv+vcV5+A52A0qgxKhKRCUQUpClIYRgDYCIZGSG0bRJAEEGYwiiUoEEoAgZhGEYJjCGMEIEhAkMERAnGGRGzAxdmhVvPlimP6GWibwj96NKAfhOmVCc9tVmqbqs6QNRdhH2TaOXARuQTPUmdwvSDjy/Z4RfgDPfGxHxcMOgNnmfPYkjsLdibuixscXZKgUe+13LOT2yxKHU0grNZWaFZ8dOGDxpyDOiKdD4l62D59UiD0p7es1XWCWq3OfQCRxIFS+oA5igiH5NF+CTSHpxjsmcv+GyWObEHTvbsXKQ9U5gOyJKbCtdsQO0gGBt8cLyjDdW9Pxn43XxwrQeVzodA8jfNO3WGepNYv6cUNAFhhBhdf8jl0S1OcKgSexWELkw8PUxFaZ4q6d/U4jGgG44sTVZBMoYZy+lmRHrByq/LmcuPgKHBVT9u+XxjxoASPgsTAxoyKWIPtSGaJL9tm9KYK40DXY7Y5yHrZ789vdr2hhOuV/+OOpWiwcX5qCPNRe49wZf23Bh9f3Iv18/LcKXkdsgyNVoajxQ84qNyrFPdD1Yi8JHkc/XM0x4gM8zzecz/PRCXq+nN7QJSvmqKOW8Bn02KyZ7NcJ3E6BvyGXLk+vApGNy+QPLaR6JMHtK3dh4djsQRKB2xz+86BiO2O2F8H4KexEpKeht6nmSng1fu6njBhOQl8ENNyThVqHMuPhLrDyLP+ICPRQGTlyRJiIlLgiSHCfDlEJiQIKcCsLWx6hqp3rNSAw==')">COPY CODE</button>
+            </div>
+        </div>
+
         <div id="movesets" class="page"><h1>Movesets</h1><p>Inventory empty.</p></div>
         <div id="animations" class="page"><h1>Animations</h1><p>No animations yet.</p></div>
-        <div id="contact" class="page"><h1>Contact</h1><a href="https://guns.lol/azmi" target="_blank" class="cl">guns.lol/azmi</a></div>
+        <div id="contact" class="page"><h1>Contact</h1><a href="https://guns.lol/azmi" target="_blank" style="color:#f00;font-size:2rem;">guns.lol/azmi</a></div>
     </div>
 
     <div class="mo" id="sMod"><div class="sc">
@@ -129,7 +147,7 @@
         </div></div>
         <div class="row"><span>Glitch</span><div class="sw on" id="gt" onclick="opt('gl')"><div class="kn"></div></div></div>
         <div class="row"><span>Music</span><div class="sw" id="mt" onclick="mu()"><div class="kn"></div></div></div>
-        <input type="range" id="v" min="0" max="1" step="0.05" value="0.4" style="width:100%" oninput="document.getElementById('m').volume=this.value">
+        <input type="range" min="0" max="1" step="0.05" value="0.4" style="width:100%" oninput="document.getElementById('m').volume=this.value">
         <button class="set-btn" style="width:100%;margin-top:20px" onclick="tog()">CLOSE</button>
     </div></div>
 
@@ -161,27 +179,27 @@
             document.documentElement.style.setProperty('--p',t[0]); 
             document.documentElement.style.setProperty('--s',t[1]); 
             document.documentElement.style.setProperty('--g',t[2]); 
-
-            if(c === 'gold') {
-                document.documentElement.style.setProperty('--c-color', '#f00');
-            } else {
-                document.documentElement.style.setProperty('--c-color', '#ffcc00');
-            }
+            document.documentElement.style.setProperty('--c-color', c==='gold' ? '#f00' : '#ffcc00');
         }
 
-        function opt(type) { if(type=='gl'){document.getElementById('ht').classList.toggle('glitch'); document.getElementById('gt').classList.toggle('on');} }
+        function cp(btn, val) {
+            navigator.clipboard.writeText(val).then(() => {
+                const old = btn.innerText; btn.innerText = "COPIED! ✅";
+                setTimeout(() => btn.innerText = old, 2000);
+            });
+        }
+
+        function opt(type) { if(type=='gl'){document.querySelector('.glitch').style.animation = document.getElementById('gt').classList.toggle('on') ? 'gl 3s infinite' : 'none';} }
         function tog() { mod.style.display = (mod.style.display=='flex')?'none':'flex'; }
-        function mu() { 
-            const mt = document.getElementById('mt');
-            if(music.paused){ music.play().then(()=>mt.classList.add('on')); } 
-            else { music.pause(); mt.classList.remove('on'); }
-        }
+        function mu() { if(music.paused){ music.play().then(()=>document.getElementById('mt').classList.add('on')); } else { music.pause(); document.getElementById('mt').classList.remove('on'); } }
+        
         function pg(id, btn) { 
             b.classList.add('sk'); setTimeout(()=>b.classList.remove('sk'),200); 
             document.querySelectorAll('.page').forEach(p=>p.classList.remove('active')); 
             document.querySelectorAll('.nb').forEach(n=>n.classList.remove('active')); 
             document.getElementById(id).classList.add('active'); btn.classList.add('active'); 
         }
+
         setInterval(() => { pts++; const rk=["UNRANKED","GRADE 4","GRADE 2","GRADE 1","SPECIAL GRADE","HONOURED"]; document.getElementById('r').innerText="RANK: "+rk[Math.min(Math.floor(pts/10),5)]; }, 1000);
     </script>
 </body>
