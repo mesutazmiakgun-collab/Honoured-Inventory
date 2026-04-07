@@ -6,12 +6,13 @@
     <title>Honoured | Absolute Inventory</title>
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap" rel="stylesheet">
     <style>
-        /* CORE THEME LOCKDOWN - DO NOT ALTER */
+        /* CORE THEME LOCKDOWN */
         :root { 
             --p: #f00; --s: #5ab9ff; --g: #300; --c: #ffcc00;
+            --ce: #00e5ff; /* Cursed Energy Blue */
             --side-bg: rgba(5, 5, 5, 0.98);
         }
-        * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none; scrollbar-width: none; }
+        * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; cursor: none !important; scrollbar-width: none; }
         *::-webkit-scrollbar { display: none !important; }
 
         body { 
@@ -19,11 +20,23 @@
             background: radial-gradient(circle at 15% 50%, var(--g) 0%, #000 100%); 
         }
 
+        /* CURSOR ENERGY LOCKDOWN - FIXED SETTINGS VISIBILITY */
+        .tr { 
+            width: 14px; height: 14px; 
+            background: var(--ce); /* Changed to CE Blue */
+            position: fixed; border-radius: 50%; 
+            pointer-events: none; 
+            z-index: 1000000; /* MAX Z-INDEX: FLOATS ABOVE SETTINGS */
+            transform: translate(-50%, -50%); 
+            box-shadow: 0 0 20px var(--ce), 0 0 40px var(--s);
+            transition: width 0.2s, height 0.2s;
+            mix-blend-mode: screen;
+        }
+        
         /* VISUAL EFFECTS LOCKDOWN */
         #crt { position: fixed; inset: 0; pointer-events: none; z-index: 9999; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02)); background-size: 100% 2px, 2px 100%; display: none; }
-        .tr { width: 14px; height: 14px; background: var(--c); position: fixed; border-radius: 50%; pointer-events: none; z-index: 10000; transform: translate(-50%, -50%); box-shadow: 0 0 25px var(--c); }
-        
-        /* SIDEBAR LOCKDOWN - RESTORED ORIGINAL LOGIC */
+
+        /* SIDEBAR LOCKDOWN */
         .sd { width: 320px; background: var(--side-bg); backdrop-filter: blur(25px); padding: 45px 30px; display: flex; flex-direction: column; border-right: 3px solid var(--p); z-index: 100; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 20px 0 60px rgba(0,0,0,1); }
         .sd.hidden { margin-left: -320px; }
         
@@ -35,7 +48,7 @@
         .rk { font-size: .7rem; color: var(--c); letter-spacing: 5px; text-transform: uppercase; margin-bottom: 40px; background: rgba(255,204,0,0.1); padding: 5px 12px; border-radius: 4px; display: inline-block; border: 1px solid rgba(255,204,0,0.2); }
 
         .nb { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); color: #777; padding: 20px; text-align: left; margin-bottom: 12px; width: 100%; transition: 0.3s; font-size: 0.95rem; border-radius: 6px; }
-        .nb:hover { transform: translateX(15px); border-color: var(--p); color: #fff; background: rgba(255,0,0,0.08); }
+        .nb:hover { transform: translateX(15px); border-color: var(--p); color: #CE Blue; background: rgba(0, 229, 255, 0.05); }
         .nb.active { border-color: var(--s); color: var(--s); background: rgba(90, 185, 255, 0.05); box-shadow: 0 0 25px rgba(90,185,255,0.15); }
 
         /* VIEWPORT LOCKDOWN */
@@ -46,21 +59,21 @@
         h1 { font-size: 5.5rem; margin: 0 0 45px 0; color: var(--p); text-shadow: 8px 8px 0 #fff; animation: glitch 5s infinite; text-transform: uppercase; }
 
         .card { background: rgba(255,255,255,0.01); border: 1px solid #151515; padding: 35px; width: 100%; margin-bottom: 25px; border-radius: 12px; position: relative; transition: 0.4s; overflow: hidden; }
-        .card:hover { border-color: var(--p); background: rgba(255,0,0,0.03); transform: translateY(-5px); }
+        .card:hover { border-color: var(--ce); background: rgba(0,229,255,0.02); transform: translateY(-5px); }
         .btn { position: absolute; right: 35px; top: 50%; transform: translateY(-50%); background: var(--p); color: #fff; border: none; padding: 15px 30px; border-radius: 6px; font-weight: bold; box-shadow: 0 0 15px var(--p); }
 
-        textarea, input { width: 100%; background: #030303; color: var(--s); border: 1px solid #111; padding: 25px; font-size: 1.1rem; border-radius: 6px; outline: none; margin-top: 25px; border-left: 6px solid var(--p); }
+        textarea, input { width: 100%; background: #030303; color: var(--s); border: 1px solid #111; padding: 25px; font-size: 1.1rem; border-radius: 6px; outline: none; margin-top: 25px; border-left: 6px solid var(--ce); }
 
         /* MODAL LOCKDOWN */
-        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.99); z-index: 100000; justify-content: center; align-items: center; }
-        .sc { background: #000; border: 3px solid var(--p); width: 550px; padding: 45px; border-radius: 15px; box-shadow: 0 0 80px rgba(255,0,0,0.3); }
+        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.99); z-index: 999999; justify-content: center; align-items: center; }
+        .sc { background: #000; border: 3px solid var(--ce); width: 550px; padding: 45px; border-radius: 15px; box-shadow: 0 0 80px rgba(0, 229, 255, 0.2); }
 
         @keyframes glitch { 0%, 5% { transform: translate(0); } 2% { transform: translate(-5px,3px); text-shadow: 8px 8px 0 #fff,-5px 0 var(--p); } 4% { transform: translate(5px,-3px); text-shadow: 8px 8px 0 #fff,5px 0 var(--s); } }
     </style>
 </head>
 <body>
     <div id="crt"></div>
-    <div id="c" class="tr"></div><div class="tr" style="opacity:0.6"></div><div class="tr" style="opacity:0.3"></div>
+    <div id="c" class="tr"></div><div class="tr" style="opacity:0.6; width:10px; height:10px;"></div><div class="tr" style="opacity:0.3; width:6px; height:6px;"></div>
 
     <audio id="bgm" loop><source src="Let It Ride - Anno Domini Beats.mp3"></audio>
     <button id="tog" onclick="togS()">«</button>
@@ -74,7 +87,7 @@
         <button class="nb" onclick="nav('an',this)">ANIMATIONS</button>
         <button class="nb" onclick="nav('v',this)">THE VAULT</button>
         <button class="nb" onclick="nav('co',this)">CONTACT</button>
-        <button class="nb" style="margin-top:auto; border-color:var(--p); color:var(--p);" onclick="togM()">SYSTEM OVERRIDE ⚙️</button>
+        <button class="nb" style="margin-top:auto; border-color:var(--ce); color:var(--ce);" onclick="togM()">SYSTEM OVERRIDE ⚙️</button>
     </div>
 
     <div class="mc">
@@ -129,7 +142,7 @@
 
     <div class="mo" id="mod">
         <div class="sc">
-            <h2 style="color:var(--p); margin:0; letter-spacing:4px">CORE OVERRIDE</h2>
+            <h2 style="color:var(--ce); margin:0; letter-spacing:4px">CORE OVERRIDE</h2>
             <div style="margin-top:40px">
                 <div style="display:flex; justify-content:space-between; color:var(--s); font-size:0.85rem; margin-bottom:12px"><span>Aura Volume</span><span id="vv">0%</span></div>
                 <input type="range" min="0" max="100" value="0" oninput="sv(this.value)" style="width:100%">
@@ -144,6 +157,7 @@
     </div>
 
     <script>
+        /* LOGIC LOCKDOWN */
         const b = document.getElementById('bgm'), s = document.getElementById('side'), m = document.getElementById('mod'), tr = document.querySelectorAll('.tr'), ct = document.getElementById('crt');
         const r = { 
             H: "health_ui_protocol_v4.5_sync_ENCODED", 
@@ -168,8 +182,18 @@
         function cl() { document.getElementById('a-l').style.display='block'; document.getElementById('a-v').style.display='none'; }
         function cp() { document.getElementById('out').select(); document.execCommand('copy'); alert("String Acquired."); }
         async function tx(fid, iid, bid, sid=null) { const bt = document.getElementById(bid), i = document.getElementById(iid); if(!i.value.trim()) return; bt.innerText = "TRANSMITTING..."; try { await fetch(`https://formspree.io/f/${fid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: i.value, subject: sid?document.getElementById(sid).value:'' }) }); bt.innerText = "SIGNAL SENT"; i.value = ""; } catch(e) { bt.innerText = "LINK FAILURE"; } setTimeout(()=>bt.innerText = "SUBMIT DATA", 3000); }
+        
         window.addEventListener('mousemove', e => { ms.x = e.clientX; ms.y = e.clientY; });
-        function f() { let x = ms.x, y = ms.y; tr.forEach((t, i) => { t.style.left = x + "px"; t.style.top = y + "px"; x += ((tr[i+1]?.offsetLeft || x) - x) * 0.35; y += ((tr[i+1]?.offsetTop || y) - y) * 0.35; }); requestAnimationFrame(f); }
+        function f() { 
+            let x = ms.x, y = ms.y; 
+            tr.forEach((t, i) => { 
+                t.style.left = x + "px"; t.style.top = y + "px"; 
+                // Enhanced trail lag for cursed energy feel
+                x += ((tr[i+1]?.offsetLeft || x) - x) * 0.3; 
+                y += ((tr[i+1]?.offsetTop || y) - y) * 0.3; 
+            }); 
+            requestAnimationFrame(f); 
+        }
         f();
     </script>
 </body>
