@@ -1,38 +1,78 @@
-.arsenal-container {
-    background-color: #000;
-    border: 2px solid #ff0000;
-    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
-    padding: 20px;
-    width: 100%;
-    max-width: 900px; /* Adjust based on your Health Indicator width */
-    margin-top: 10px; /* Space between the two UIs */
-    font-family: 'Comic Sans MS', 'Chalkboard SE', cursive; /* To match the 'hand-drawn' look */
-}
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body {
+        background-color: #050505;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 50px;
+        font-family: 'Comic Sans MS', 'Chalkboard SE', cursive;
+    }
 
-.arsenal-header {
-    color: #33aaff; /* Blue to match your 'Health Indicator' title */
-    text-transform: uppercase;
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
+    /* Common Container Style */
+    .ui-card {
+        background-color: #000;
+        border: 2px solid #ff0000;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+        padding: 20px;
+        width: 600px;
+        position: relative;
+        margin-bottom: 15px; /* Spacing between cards */
+    }
 
-.arsenal-desc {
-    color: #888;
-    font-size: 1rem;
-}
+    .title {
+        text-transform: uppercase;
+        font-size: 22px;
+        letter-spacing: 1px;
+        margin: 0;
+    }
 
-.code-btn {
-    float: right;
-    background: transparent;
-    border: 1px solid #444;
-    color: #fff;
-    padding: 10px 20px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: 0.3s;
-}
+    /* Health Indicator Color */
+    .health-title { color: #33aaff; }
+    
+    /* Arsenal Color */
+    .arsenal-title { color: #33aaff; }
 
-.code-btn:hover {
-    background: #fff;
-    color: #000;
-}
+    .description {
+        color: #a0a0a0;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .view-btn {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        background: transparent;
+        border: 1px solid #444;
+        color: #fff;
+        padding: 8px 15px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 14px;
+    }
+
+    .view-btn:hover {
+        background-color: #fff;
+        color: #000;
+    }
+</style>
+</head>
+<body>
+
+    <div class="ui-card">
+        <button class="view-btn">VIEW CODE</button>
+        <h2 class="title health-title">HEALTH INDICATOR</h2>
+        <p class="description">Visual health bar customizer string.</p>
+    </div>
+
+    <div class="ui-card">
+        <button class="view-btn">VIEW CODE</button>
+        <h2 class="title arsenal-title">FULL ARSENAL CODE</h2>
+        <p class="description">Complete weapon library and combat logic strings.</p>
+    </div>
+
+</body>
+</html>
