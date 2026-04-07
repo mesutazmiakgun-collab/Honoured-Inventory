@@ -19,20 +19,21 @@
             width: 280px; min-width: 280px; background: rgba(5,5,5,.98); 
             padding: 40px 20px; display: flex; flex-direction: column; 
             border-right: 3px solid var(--p); z-index: 100; position: relative; 
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin-left 0.5s; 
+            transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
         }
-        .sd.hidden { transform: translateX(-100%); margin-left: -280px; }
+        .sd.hidden { margin-left: -280px; }
 
-        /* TOGGLE BUTTON: Fixed decoupling */
+        /* THE TOGGLE BUTTON: Fixed Stay-Put Logic */
         #m-tog { 
-            position: absolute; top: 20px; right: -45px; 
+            position: fixed; top: 20px; left: 245px; /* Sits on sidebar edge */
             background: var(--p); color: #fff; border: none; 
             width: 35px; height: 35px; border-radius: 5px; 
             z-index: 1001; box-shadow: 0 0 10px var(--p); 
             display: flex; align-items: center; justify-content: center; 
-            font-weight: bold; transition: 0.3s;
+            font-weight: bold; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .sd.hidden #m-tog { right: -40px; position: fixed; left: 10px; }
+        /* When hidden, button moves to the far left edge of the screen */
+        .sd.hidden #m-tog { left: 10px; }
         
         .st { font-size: 1.8rem; color: var(--p); text-transform: uppercase; text-shadow: 0 0 10px var(--p); margin-bottom: 5px; }
         .rk { font-size: .8rem; color: var(--s); margin-bottom: 30px; letter-spacing: 2px; }
@@ -40,10 +41,10 @@
         .nb.active { border: 2px solid var(--s) !important; box-shadow: 0 0 20px var(--s); background: #001; }
         .set-btn { margin-top: auto; background: #111; border: 2px solid #fff; color: #fff; padding: 12px; text-align: center; width: 100%; transition: 0.2s; }
 
-        /* MAIN CONTENT: Auto-centering logic */
+        /* MAIN CONTENT: Auto-centering */
         .mc { 
             flex: 1; padding: 50px 60px; overflow-y: auto; 
-            display: flex; flex-direction: column; align-items: center; /* This centers everything */
+            display: flex; flex-direction: column; align-items: center; 
             text-align: center; transition: 0.5s; 
         }
         .page { display: none; width: 100%; max-width: 1000px; } 
@@ -56,13 +57,11 @@
         .welcome-text { font-size: 1.4rem; line-height: 1.6; max-width: 800px; margin: 25px 0 40px; }
         .vb { width: 100%; max-width: 850px; aspect-ratio: 16/9; border: 6px solid var(--p); box-shadow: 0 0 50px var(--p); background: #000; }
 
-        /* AURA LINK */
         .cl { color: #f00; font-size: 3rem; text-decoration: none; display: inline-block; margin-top: 20px; position: relative; }
         .cl:hover { color: #5ab9ff; transform: scale(1.05); text-shadow: 0 0 20px #5ab9ff; }
         .cl::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 5px; background: #fff; animation: pulse 1.5s infinite alternate; }
         @keyframes pulse { 0% { box-shadow: 0 0 5px #fff; opacity: 0.6; } 100% { box-shadow: 0 0 25px #fff, 0 0 45px #fff; opacity: 1; } }
 
-        /* Settings */
         .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.95); z-index: 1000; justify-content: center; align-items: center; }
         .sc { background: #0a0a0a; border: 4px solid var(--p); width: 450px; padding: 30px; box-shadow: 0 0 30px var(--p); }
         .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -80,8 +79,9 @@
 
     <audio id="m" loop><source src="Let%20It%20Ride%20-%20Anno%20Domini%20Beats.mp3"></audio>
 
+    <button id="m-tog" onclick="tgs()">«</button>
+
     <div class="sd" id="sidebar">
-        <button id="m-tog" onclick="tgs()">«</button>
         <div class="st">Honoured<br>Inventory</div><div class="rk" id="r">RANK: UNRANKED</div>
         <button class="nb active" onclick="pg('home',this)">Home</button>
         <button class="nb" onclick="pg('codes',this)">Codes</button>
