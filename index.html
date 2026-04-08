@@ -6,7 +6,7 @@
     <title>Honoured | Absolute Inventory</title>
     <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&display=swap" rel="stylesheet">
     <style>
-        /* 1. CORE THEME & LOCKDOWN */
+        /* 1. CORE THEME LOCKDOWN */
         :root { 
             --p: #f00; --s: #5ab9ff; --g: #300; --c: #ffcc00; --ce: #00e5ff;
             --side-bg: rgba(5, 5, 5, 0.98);
@@ -14,57 +14,73 @@
         * { font-family: 'Finger Paint', cursive !important; box-sizing: border-box; scrollbar-width: none; }
         *::-webkit-scrollbar { display: none !important; }
         
-        /* 8. SETTINGS OVERRIDE (MAX Z-INDEX) */
         body { 
             background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; 
             background: radial-gradient(circle at 15% 50%, var(--g) 0%, #000 100%); 
             cursor: none; 
         }
 
-        .custom-cursor { position: fixed; width: 15px; height: 15px; background: var(--ce); border-radius: 50%; pointer-events: none; z-index: 2000000; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--ce); display: block; }
-        .trail { position: fixed; width: 8px; height: 8px; background: var(--s); border-radius: 50%; pointer-events: none; z-index: 1999999; transform: translate(-50%, -50%); opacity: 0.5; display: block; }
+        /* CURSOR SYSTEM (TOP PRIORITY) */
+        #cursor { position: fixed; width: 12px; height: 12px; background: var(--ce); border-radius: 50%; pointer-events: none; z-index: 5000000; transform: translate(-50%, -50%); box-shadow: 0 0 15px var(--ce); }
+        #trail { position: fixed; width: 6px; height: 6px; background: var(--s); border-radius: 50%; pointer-events: none; z-index: 4999999; transform: translate(-50%, -50%); opacity: 0.6; }
 
-        /* SIDEBAR SCROLLING */
-        .sd { width: 320px; background: var(--side-bg); border-right: 3px solid var(--p); display: flex; flex-direction: column; padding: 40px 20px; z-index: 1000; overflow-y: auto; transition: 0.5s; }
+        /* SIDEBAR (SCROLLABLE & BRANDED) */
+        .sd { width: 320px; background: var(--side-bg); border-right: 3px solid var(--p); display: flex; flex-direction: column; padding: 40px 20px; z-index: 1000; overflow-y: auto; transition: 0.5s; height: 100vh; }
         .sd.hidden { margin-left: -320px; }
-        #tog { position: fixed; top: 20px; left: 280px; z-index: 1100; background: var(--p); border: none; color: #fff; padding: 10px; cursor: pointer; transition: 0.4s; }
+        #tog { position: fixed; top: 20px; left: 280px; z-index: 1100; background: var(--p); border: none; color: #fff; width: 40px; height: 40px; cursor: pointer; border-radius: 5px; }
         .sd.hidden #tog { left: 15px; }
 
-        /* 8. SETTINGS TAB (JJS STYLE) */
-        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1500000; justify-content: center; align-items: center; }
-        .sc { background: #050505; border: 2px solid var(--ce); width: 500px; max-height: 80vh; padding: 30px; border-radius: 10px; overflow-y: auto; box-shadow: 0 0 50px rgba(0,229,255,0.2); }
+        .branding { text-align: left; margin-bottom: 30px; }
+        .branding h2 { font-size: 1.8rem; margin: 0; line-height: 1; color: #fff; text-transform: uppercase; }
+        .branding h2 span { color: var(--p); display: block; font-size: 2.2rem; }
+
+        /* JJS TOGGLE SWITCHES */
+        .t-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px; background: rgba(255,255,255,0.02); border-radius: 8px; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; inset: 0; background-color: #333; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--p); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        /* SETTINGS MODAL (MAX Z-INDEX + SCROLL) */
+        .mo { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 4000000; justify-content: center; align-items: center; }
+        .sc { background: #050505; border: 2px solid var(--ce); width: 500px; max-height: 75vh; padding: 35px; border-radius: 12px; overflow-y: auto; position: relative; box-shadow: 0 0 50px rgba(0,229,255,0.1); }
 
         /* UI ELEMENTS */
-        .nb { width: 100%; padding: 15px; margin-bottom: 10px; background: rgba(255,255,255,0.05); border: 1px solid transparent; color: #aaa; text-align: left; cursor: pointer; border-radius: 5px; }
-        .nb.active { border-color: var(--s); color: var(--s); background: rgba(0,229,255,0.1); }
-        .mc { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
-        .pg { display: none; width: 100%; max-width: 800px; flex-direction: column; }
-        .pg.active { display: flex; }
+        .nb { width: 100%; padding: 18px; margin-bottom: 12px; background: rgba(255,255,255,0.03); border: 1px solid transparent; color: #888; text-align: left; cursor: pointer; border-radius: 6px; flex-shrink: 0; }
+        .nb.active { border-color: var(--s); color: var(--s); background: rgba(0,229,255,0.05); }
         
-        .card { background: #111; padding: 25px; border-radius: 10px; margin-bottom: 20px; position: relative; border-left: 5px solid var(--p); }
-        .btn { background: var(--p); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .mc { flex: 1; padding: 60px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; position: relative; }
+        .pg { display: none; width: 100%; max-width: 850px; flex-direction: column; }
+        .pg.active { display: flex; }
 
-        /* SLIDERS (JJS STYLE) */
-        input[type="range"] { -webkit-appearance: none; width: 100%; background: #222; height: 8px; border-radius: 5px; outline: none; }
-        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; background: var(--ce); border-radius: 50%; cursor: pointer; }
+        .card { background: #080808; border: 1px solid #1a1a1a; padding: 30px; border-radius: 10px; margin-bottom: 20px; position: relative; border-left: 4px solid var(--p); }
+        .btn { background: var(--p); color: #fff; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-weight: bold; }
 
-        /* GLITCH EFFECT */
-        .glitch { animation: g 2s infinite; }
-        @keyframes g { 0% { transform: translate(0); } 2% { transform: translate(-2px, 1px); } 4% { transform: translate(2px, -1px); } }
+        /* RANGE SLIDER */
+        input[type="range"] { -webkit-appearance: none; width: 100%; height: 6px; background: #222; border-radius: 5px; outline: none; margin: 15px 0; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; background: var(--p); border-radius: 50%; cursor: pointer; box-shadow: 0 0 10px var(--p); }
+
+        .glitch-text { animation: gl 0.3s infinite linear; }
+        @keyframes gl { 0% { transform: translate(0); } 20% { transform: translate(-2px, 1px); } 40% { transform: translate(2px, -1px); } 100% { transform: translate(0); } }
     </style>
 </head>
 <body onclick="playSfx()">
+    
     <audio id="sfx_click" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
     <audio id="bgm" loop><source src="Let It Ride - Anno Domini Beats.mp3"></audio>
 
-    <div id="cursor" class="custom-cursor"></div>
-    <div id="trail" class="trail"></div>
+    <div id="cursor"></div>
+    <div id="trail"></div>
 
     <button id="tog" onclick="togS()">«</button>
 
     <div class="sd" id="side">
-        <h2 class="glitch" id="main-title">HONOURED<span>.</span></h2>
-        <p style="font-size: 0.6rem; color: var(--c); letter-spacing: 3px; margin-bottom: 30px;">RANK: SPECIAL GRADE</p>
+        <div class="branding">
+            <h2 id="b-text">HONOURED<br><span>INVENTORY</span></h2>
+        </div>
+        <p style="color: var(--c); font-size: 0.6rem; letter-spacing: 5px; margin-bottom: 35px;">SYSTEM: ACTIVE</p>
         
         <button class="nb active" onclick="nav('h',this)">HOME</button>
         <button class="nb" onclick="nav('c',this)">CODES</button>
@@ -72,158 +88,136 @@
         <button class="nb" onclick="nav('a',this)">ANIMATIONS</button>
         <button class="nb" onclick="nav('s',this)">SUGGESTIONS</button>
         <button class="nb" onclick="nav('co',this)">CONTACT</button>
-        <button class="nb" style="margin-top:auto; border-color:var(--ce); color:var(--ce);" onclick="togM()">SYSTEM OVERRIDE ⚙️</button>
+        
+        <div style="height: 100px; flex-shrink: 0;"></div> <button class="nb" style="margin-top:auto; border-color:var(--ce); color:var(--ce);" onclick="togM()">SYSTEM OVERRIDE ⚙️</button>
     </div>
 
     <div class="mc">
         <div id="h" class="pg active">
-            <h1 class="glitch">Welcome, User</h1>
-            <p style="color: #888; text-align: center;">Credits: Honoured Dev Team. This is a disclaimer: All strings provided are for educational/private server use only.</p>
-            <div style="width:100%; aspect-ratio:16/9; background:#111; margin-top:20px; border:2px solid var(--p);">
-                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/7E-KYBDySz8" frameborder="0"></iframe>
+            <h1>HOME</h1>
+            <p style="text-align: center; color: #555; line-height: 1.6;">Credits: Honoured Dev Team. This inventory is a custom toolset. Use of strings is at your own discretion. Stay Honoured.</p>
+            <div style="width:100%; aspect-ratio:16/9; border:3px solid var(--p); margin-top:30px; border-radius:10px; overflow:hidden; background:#111;">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/7E-KYBDySz8" frameborder="0" allowfullscreen></iframe>
             </div>
         </div>
 
         <div id="c" class="pg">
             <div id="c-list">
-                <h1>Codes</h1>
+                <h1>CODES</h1>
                 <div class="card">
-                    <h3>Health Indicator UI</h3>
-                    <p>Clean indicators for HP/Stamina.</p>
-                    <button class="btn" onclick="openSub('health_code_v4')">VIEW CODE</button>
+                    <h2>Health Indicator UI</h2>
+                    <p>Standard HP/Stamina overlay for combat data.</p>
+                    <button class="btn" onclick="openCode('HEALTH_UI_V4_AURA')">VIEW CODE</button>
                 </div>
                 <div class="card">
-                    <h3>Full Arsenal Inventory</h3>
-                    <p>Global restore for all special items.</p>
-                    <button class="btn" onclick="openSub('arsenal_full_string')">VIEW CODE</button>
+                    <h2>Full Arsenal</h2>
+                    <p>Unlock all special grade slots and itemized inventory.</p>
+                    <button class="btn" onclick="openCode('ARSENAL_LOADOUT_SPECIAL')">VIEW CODE</button>
                 </div>
             </div>
-            <div id="c-sub" style="display:none; width:100%;">
-                <button class="nb" onclick="closeSub()" style="width:120px; border-color:var(--p)">« BACK</button>
-                <textarea id="code-box" readonly style="width:100%; height:300px; background:#000; color:var(--ce); padding:20px; border:1px solid #333; margin:20px 0;"></textarea>
-                <button class="btn" style="width:100%; background:var(--s)" onclick="copyCode()">COPY ALL STRINGS</button>
+            <div id="c-sub" style="display:none; width:100%">
+                <button class="btn" style="background:#222; margin-bottom:20px;" onclick="closeCode()">« BACK</button>
+                <textarea id="code-box" readonly style="width:100%; height:300px; background:#000; border:1px solid var(--p); color:var(--ce); padding:20px; font-family: monospace;"></textarea>
+                <button class="btn" style="width:100%; background:var(--s); margin-top:20px;" onclick="copyCode()">COPY ALL STRINGS</button>
             </div>
         </div>
 
-        <div id="m" class="pg"><h1>Movesets</h1><p>Inventory Empty...</p></div>
-        <div id="a" class="pg"><h1>Animations</h1><p>Inventory Empty...</p></div>
+        <div id="m" class="pg"><h1>MOVESETS</h1><p>Inventory Empty...</p></div>
+        <div id="a" class="pg"><h1>ANIMATIONS</h1><p>Inventory Empty...</p></div>
 
         <div id="s" class="pg">
-            <h1>Suggestions</h1>
-            <textarea id="sug-in" placeholder="What should we add?"></textarea>
-            <button class="btn" style="margin-top:10px" onclick="sendForm('xnjowojl', 'sug-in')">SEND FEEDBACK</button>
+            <h1>SUGGESTIONS</h1>
+            <textarea id="s-msg" placeholder="What should we add to the inventory?" style="width:100%; height:150px; background:#111; border:1px solid #333; color:#fff; padding:15px;"></textarea>
+            <button class="btn" style="margin-top:20px" onclick="send('xnjowojl', 's-msg')">SUBMIT</button>
         </div>
 
         <div id="co" class="pg">
-            <h1>Contact</h1>
-            <input type="text" id="con-sub" placeholder="Subject Name">
-            <textarea id="con-msg" placeholder="Message content..."></textarea>
-            <button class="btn" style="margin-top:10px" onclick="sendForm('xdapbyva', 'con-msg', 'con-sub')">TRANSMIT SIGNAL</button>
+            <h1>CONTACT</h1>
+            <input type="text" id="co-title" placeholder="Topic" style="width:100%; background:#111; border:1px solid #333; color:#fff; padding:15px; margin-bottom:15px;">
+            <textarea id="co-msg" placeholder="Message content..." style="width:100%; height:150px; background:#111; border:1px solid #333; color:#fff; padding:15px;"></textarea>
+            <button class="btn" style="margin-top:20px" onclick="send('xdapbyva', 'co-msg', 'co-title')">TRANSMIT</button>
         </div>
     </div>
 
     <div class="mo" id="mod">
         <div class="sc">
-            <h2 style="color:var(--ce)">SYSTEM OVERRIDE</h2>
-            <hr style="border:0; border-top:1px solid #222; margin:20px 0;">
+            <h2 style="color:var(--ce); margin:0;">SYSTEM SETTINGS</h2>
+            <p style="font-size: 0.7rem; color: #444; margin-bottom: 25px;">Adjust aura parameters and interface logic below.</p>
             
-            <p style="font-size:0.7rem; color:#666;">HOW TO USE: Adjust sliders to change aura. Toggle effects to optimize performance.</p>
-
-            <div style="margin:20px 0;">
-                <label>Music Volume</label>
-                <input type="range" min="0" max="100" value="50" oninput="setVol(this.value)">
+            <div class="t-row">
+                <span>Glitch Mode</span>
+                <label class="switch"><input type="checkbox" id="g-tog" checked onchange="upd()"><span class="slider"></span></label>
+            </div>
+            
+            <div class="t-row">
+                <span>Custom Cursor</span>
+                <label class="switch"><input type="checkbox" id="c-tog" checked onchange="upd()"><span class="slider"></span></label>
             </div>
 
-            <button class="nb" onclick="togGlitch()">TOGGLE GLITCH EFFECT</button>
-            <button class="nb" onclick="togCursor()">TOGGLE CUSTOM MOUSE</button>
-            
-            <p style="margin-top:30px; font-size:0.8rem; color:var(--s)">THEMES</p>
-            <div style="display:flex; gap:10px;">
-                <button onclick="setTheme('#f00')" style="background:#f00; width:30px; height:30px; border:none;"></button>
-                <button onclick="setTheme('#00e5ff')" style="background:#00e5ff; width:30px; height:30px; border:none;"></button>
-                <button onclick="setTheme('#ffcc00')" style="background:#ffcc00; width:30px; height:30px; border:none;"></button>
+            <div style="padding: 10px; background: rgba(255,255,255,0.02); border-radius: 8px; margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.9rem;">
+                    <span>Aura Volume</span><span id="v-val">50%</span>
+                </div>
+                <input type="range" min="0" max="100" value="50" oninput="setV(this.value)">
             </div>
 
-            <button class="btn" style="width:100%; margin-top:30px;" onclick="togM()">SAVE & EXIT</button>
+            <p style="color:var(--s); font-size: 0.8rem;">THEME OVERRIDE</p>
+            <div style="display:flex; gap:12px; margin-top:10px;">
+                <div onclick="setT('#f00')" style="background:#f00; width:35px; height:35px; border-radius:4px; cursor:pointer;"></div>
+                <div onclick="setT('#00e5ff')" style="background:#00e5ff; width:35px; height:35px; border-radius:4px; cursor:pointer;"></div>
+                <div onclick="setT('#ffcc00')" style="background:#ffcc00; width:35px; height:35px; border-radius:4px; cursor:pointer;"></div>
+            </div>
+
+            <hr style="border:0; border-top:1px solid #111; margin:30px 0;">
+            <p style="font-size:0.75rem; color:#888;">HOW TO USE:<br>1. Select a tab from the sidebar.<br>2. View strings and copy them.<br>3. Submit suggestions to help us grow.</p>
+            
+            <button class="btn" style="width:100%; margin-top:30px; background:#111;" onclick="togM()">EXIT OVERRIDE</button>
         </div>
     </div>
 
     <script>
-        const bgm = document.getElementById('bgm');
-        const sfx = document.getElementById('sfx_click');
-        
-        // SFX 
+        const b = document.getElementById('bgm'), sfx = document.getElementById('sfx_click');
         function playSfx() { sfx.currentTime = 0; sfx.play(); }
 
-        // NAVIGATION
         function nav(id, el) {
             document.querySelectorAll('.pg').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             document.querySelectorAll('.nb').forEach(n => n.classList.remove('active'));
             el.classList.add('active');
-            closeSub();
+            closeCode();
         }
 
-        function togS() { document.getElementById('side').classList.toggle('hidden'); }
-        function togM() { 
-            const m = document.getElementById('mod');
-            m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+        function togS() { document.getElementById('side').classList.toggle('hidden'); document.getElementById('tog').innerText = document.getElementById('side').classList.contains('hidden') ? '»' : '«'; }
+        function togM() { const m = document.getElementById('mod'); m.style.display = (m.style.display === 'flex') ? 'none' : 'flex'; }
+
+        function openCode(str) { document.getElementById('c-list').style.display='none'; document.getElementById('c-sub').style.display='block'; document.getElementById('code-box').value=str; }
+        function closeCode() { document.getElementById('c-list').style.display='block'; document.getElementById('c-sub').style.display='none'; }
+        function copyCode() { document.getElementById('code-box').select(); document.execCommand('copy'); alert("Copied."); }
+
+        function setV(v) { b.volume = v/100; document.getElementById('v-val').innerText = v+"%"; if(v>0 && b.paused) b.play(); }
+        function setT(c) { document.documentElement.style.setProperty('--p', c); }
+
+        function upd() {
+            const g = document.getElementById('g-tog').checked, c = document.getElementById('c-tog').checked;
+            document.getElementById('b-text').className = g ? 'glitch-text' : '';
+            document.getElementById('cursor').style.display = document.getElementById('trail').style.display = c ? 'block' : 'none';
+            document.body.style.cursor = c ? 'none' : 'auto';
         }
 
-        // CODES LOGIC
-        function openSub(val) {
-            document.getElementById('c-list').style.display = 'none';
-            document.getElementById('c-sub').style.display = 'block';
-            document.getElementById('code-box').value = val;
-        }
-        function closeSub() {
-            document.getElementById('c-list').style.display = 'block';
-            document.getElementById('c-sub').style.display = 'none';
-        }
-        function copyCode() {
-            const b = document.getElementById('code-box');
-            b.select();
-            document.execCommand('copy');
-            alert("Strings Copied!");
-        }
-
-        // SETTINGS LOGIC
-        function setVol(v) { bgm.volume = v/100; if(v > 0 && bgm.paused) bgm.play(); }
-        function togGlitch() { document.querySelectorAll('.glitch').forEach(e => e.style.animation = e.style.animation === 'none' ? 'g 2s infinite' : 'none'); }
-        function togCursor() { 
-            const c = document.getElementById('cursor');
-            const t = document.getElementById('trail');
-            const isVisible = c.style.display !== 'none';
-            c.style.display = t.style.display = isVisible ? 'none' : 'block';
-            document.body.style.cursor = isVisible ? 'auto' : 'none';
-        }
-        function setTheme(color) { document.documentElement.style.setProperty('--p', color); }
-
-        // MOUSE FOLLOW
-        window.addEventListener('mousemove', (e) => {
-            const c = document.getElementById('cursor');
-            const t = document.getElementById('trail');
-            c.style.left = e.clientX + 'px';
-            c.style.top = e.clientY + 'px';
-            setTimeout(() => {
-                t.style.left = e.clientX + 'px';
-                t.style.top = e.clientY + 'px';
-            }, 100);
+        window.addEventListener('mousemove', e => {
+            const c = document.getElementById('cursor'), t = document.getElementById('trail');
+            c.style.left = e.clientX+'px'; c.style.top = e.clientY+'px';
+            setTimeout(() => { t.style.left = e.clientX+'px'; t.style.top = e.clientY+'px'; }, 80);
         });
 
-        // FORM SUBMISSION
-        async function sendForm(fid, iid, sid=null) {
-            const i = document.getElementById(iid);
-            if(!i.value) return;
-            const sub = sid ? document.getElementById(sid).value : "New Submission";
-            await fetch(`https://formspree.io/f/${fid}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ subject: sub, message: i.value })
-            });
-            alert("Signal Transmitted.");
-            i.value = "";
+        async function send(fid, iid, sid=null) {
+            const m = document.getElementById(iid).value, t = sid ? document.getElementById(sid).value : "System Feedback";
+            if(!m) return;
+            await fetch(`https://formspree.io/f/${fid}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ subject: t, message: m }) });
+            alert("Sent."); document.getElementById(iid).value = "";
         }
+        
+        upd();
     </script>
 </body>
 </html>
